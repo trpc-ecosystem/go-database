@@ -1,0 +1,17 @@
+global:
+  namespace: Development
+  env_name: devcloud
+  local_ip: 127.0.0.1
+
+server:
+  service:
+    - name: trpc.kafka.consumer.service
+      address: 127.0.0.1:9092?topics=test_topic&group=uzuki_consumer
+      protocol: kafka
+      timeout: 1000
+
+plugins:
+  log:
+    default:
+      - writer: console
+        level: debug

@@ -1,0 +1,24 @@
+global: # Global configuration
+  namespace: Development            # Environment type, divided into two types: formal production and informal development.
+  env_name: test                    # Environment name, the name of the multi-environment in informal environment.
+  container_name: container_name
+
+client: # Backend configuration for client.
+  timeout: 10000                                    # Maximum request processing time for all backends.
+  namespace: Development                           # Environments for all backends.
+  service: # The service provided by the business service can have multiple.
+    - name: trpc.gamecenter.test.redis      # The service name of the backend service.
+#      target: redis://127.0.0.1:6379/15              # Request service address format： redis://<user>:<password>@<host>:<port>/<db_number>, for details, please refer to：https://github.com/go-redis/redis/blob/v8.8.2/options.go#L189
+#      target: redis://127.0.0.1:6379/0?is_proxy=false&pool_size=88&min_idle_conns=10
+#      target: polaris://trpc.gamecenter.trpcproxy.TRPCProxy?is_proxy=true
+      namespace: Production                           # Environments for all backends.
+      timeout: 10000
+    - name: trpc.gamecenter.test.cron      # Timer configuration.
+      target: cron://*/1 * * * * *
+      timeout: 10000
+
+plugins: # Plugin configuration
+  log: # Log configuration
+    default: # The configuration of the default log can support multiple outputs.
+      - writer: console                              # Local file log.
+        level: debug                               # The level of the local file rollover log.

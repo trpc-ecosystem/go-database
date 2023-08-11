@@ -1,0 +1,5 @@
+*.test
+
+# Editor's files
+.idea
+.vscode

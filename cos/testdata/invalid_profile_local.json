@@ -1,0 +1,19 @@
+{
+  "AppName": "TestApp",
+  "Env": "Test",
+  "Region": "ap-guangzhou",
+  "SsmAccessSecretId": "xxx",
+  "SsmAccessSecretKey": "xxx",
+  "SsmEndpoint": "ssm.test.tencentcloudapi.com",
+  "SsmManagedAccessKeys": [
+    {
+      "SecretName": "AKSK_rotate_test",
+      "BackupSecretId": "xxx",
+      "BackupSecretKey": "zzz",
+      "RefreshIntervalInSeconds": 10
+    }
+  ],
+  "FailoverRegions": [
+    "ap-beijing"
+  ]
+}
