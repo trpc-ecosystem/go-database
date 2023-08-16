@@ -10,8 +10,8 @@ require (
 	github.com/xdg-go/scram v1.1.2
 	golang.org/x/time v0.3.0
 	gopkg.in/yaml.v3 v3.0.1
-	trpc.group/trpc-go/trpc-go v0.2.1-0.20230426081221-79f336e31123
-	trpc.group/trpc-go/trpc-selector-dsn v0.1.1-0.20230426031841-99e6770aea9c
+	trpc.group/trpc-go/trpc-go v0.0.0-20230815084720-2337ef2e8e46
+	trpc.group/trpc-go/trpc-selector-dsn v0.0.0-20230815091309-951ad98567f0
 )
 
 require (
@@ -24,7 +24,6 @@ require (
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/flatbuffers v2.0.0+incompatible // indirect
-	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
@@ -57,10 +56,10 @@ require (
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
 	golang.org/x/net v0.5.0 // indirect
+	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.6.0 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
-	trpc.group/trpc-go/go_reuseport v1.7.1-0.20230423021710-f5eeff5d87a3 // indirect
-	trpc.group/trpc-go/jce v0.0.0-20230424070841-15a24b5c5646 // indirect
-	trpc.group/trpc-go/tnet v0.0.12-0.20230423031524-5eb1cc42f225 // indirect
+	google.golang.org/protobuf v1.30.0 // indirect
+	trpc.group/trpc-go/tnet v0.0.0-20230810071536-9d05338021cf // indirect
+	trpc.group/trpc/trpc-protocol/pb/go/trpc v0.0.0-20230803031059-de4168eb5952 // indirect
 )

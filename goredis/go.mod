@@ -13,8 +13,7 @@ require (
 	github.com/stretchr/testify v1.8.3
 	go.uber.org/automaxprocs v1.5.2
 	google.golang.org/protobuf v1.30.0
-	trpc.group/trpc-go/jce v0.0.0-20230509062345-1f2807c6bfd6
-	trpc.group/trpc-go/trpc-go v0.13.1-0.20230612122242-3cd3cd651406
+	trpc.group/trpc-go/trpc-go v0.0.0-20230815084720-2337ef2e8e46
 )
 
 require (
@@ -60,13 +59,13 @@ require (
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/net v0.5.0 // indirect
+	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/text v0.6.0 // indirect
 	google.golang.org/genproto v0.0.0-20220504150022-98cd25cafc72 // indirect
 	google.golang.org/grpc v1.51.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	trpc.group/trpc-go/go_reuseport v1.7.1-0.20230423021710-f5eeff5d87a3 // indirect
-	trpc.group/trpc-go/tnet v0.0.12-0.20230423031524-5eb1cc42f225 // indirect
-	trpc.group/trpc/trpc-protocol/pb/go/trpc v0.1.2-0.20230530025122-c44533fe44bd // indirect
+	trpc.group/trpc-go/tnet v0.0.0-20230810071536-9d05338021cf // indirect
+	trpc.group/trpc/trpc-protocol/pb/go/trpc v0.0.0-20230803031059-de4168eb5952 // indirect
 )

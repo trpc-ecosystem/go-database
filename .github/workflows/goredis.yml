@@ -1,0 +1,25 @@
+name: Goredis Pull Request Check
+on:
+  pull_request:
+    paths:
+      - 'goredis/**'
+  push:
+    paths:
+      - 'goredis/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    name: build
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v4
+      with:
+        go-version: 1.19
+    - name: Build
+      run: cd goredis && go build -v ./...
+    - name: Test
+      run: cd goredis && go test -v -gcflags=all=-l ./...
+   

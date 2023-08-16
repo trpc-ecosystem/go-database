@@ -29,8 +29,8 @@ func fakeNewBlockedAsyncProducer(addrs []string, conf *sarama.Config) (sarama.As
 }
 
 func TestNewClientTransport(t *testing.T) {
-	_ = NewClientTransport(transport.WithClientUDPRecvSize(65536))
-	assert.Nil(t, nil)
+	ct := NewClientTransport()
+	assert.NotNil(t, ct)
 }
 
 func TestRoundTrip(t *testing.T) {

@@ -7,7 +7,6 @@ import (
 	"unsafe"
 
 	"google.golang.org/protobuf/proto"
-	"trpc.group/trpc-go/jce"
 	goredis "trpc.group/trpc-go/trpc-database/goredis"
 )
 
@@ -38,8 +37,6 @@ func Marshal(in interface{}) ([]byte, error) {
 		return StringToBytes(out), nil
 	case proto.Message:
 		return proto.Marshal(out)
-	case jce.Message:
-		return jce.Marshal(out)
 	case encoding.BinaryMarshaler:
 		return out.MarshalBinary()
 	default:
@@ -58,8 +55,6 @@ func Unmarshal(in []byte, message interface{}) error {
 		return nil
 	case proto.Message:
 		return proto.Unmarshal(in, out)
-	case jce.Message:
-		return jce.Unmarshal(in, out)
 	case encoding.BinaryUnmarshaler:
 		return out.UnmarshalBinary(in)
 	default:

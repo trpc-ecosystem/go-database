@@ -417,6 +417,7 @@ golang.org/x/sync v0.0.0-20201207232520-09787c993a3a/go.mod h1:RxMgew5VJxzue5/jJ
 golang.org/x/sync v0.0.0-20210220032951-036812b2e83c/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.1.0 h1:wsuoTGHzEhffawBOhz5CYhcrV4IdKZbEyZjBMuTp12o=
+golang.org/x/sync v0.1.0/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20180830151530-49385e6e1522/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20180905080454-ebe1bf3edb33/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20181116152217-5ac8a444bdc5/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
@@ -651,13 +652,9 @@ honnef.co/go/tools v0.0.1-2020.1.4/go.mod h1:X/FiERA/W4tHapMX5mGpAtMSVEeEUOyHaw9
 rsc.io/binaryregexp v0.2.0/go.mod h1:qTv7/COck+e2FymRvadv62gMdZztPaShugOCi3I+8D8=
 rsc.io/quote/v3 v3.1.0/go.mod h1:yEA65RcK8LyAZtP9Kv3t0HmxON59tX3rD+tICJqUlj0=
 rsc.io/sampler v1.3.0/go.mod h1:T1hPZKmBbMNahiBKFy5HrXp6adAjACjK9JXDnKaTXpA=
-trpc.group/trpc-go/go_reuseport v1.7.1-0.20230423021710-f5eeff5d87a3 h1:FN4gLJ2xxueQ/LYPxfrAwq6hmdHJaAftFZm8qvqI63o=
-trpc.group/trpc-go/go_reuseport v1.7.1-0.20230423021710-f5eeff5d87a3/go.mod h1:9yQwBnMw+3ceJd5MPqP18t6y/EAi7fEh59MiFcqeS78=
-trpc.group/trpc-go/jce v0.0.0-20230509062345-1f2807c6bfd6 h1:Stc6Yy33I+8seB5nwd65JgLK8GQ7mrgYZS2wGryuwW0=
-trpc.group/trpc-go/jce v0.0.0-20230509062345-1f2807c6bfd6/go.mod h1:uL8cZA2t+vz9KKNQYJrW9oy8JynTF1UCM62WvDgsyPY=
-trpc.group/trpc-go/tnet v0.0.12-0.20230423031524-5eb1cc42f225 h1:sExJeNiDhhQ7dP6P0afYZ+HU1MnnMYhlnDApSmCLu9U=
-trpc.group/trpc-go/tnet v0.0.12-0.20230423031524-5eb1cc42f225/go.mod h1:YUGAw+mutXH1ILO6UzoZYeT7G/9l5xmEDXmp/CvaP/E=
-trpc.group/trpc-go/trpc-go v0.13.1-0.20230612122242-3cd3cd651406 h1:9dg0gbA4sI4GxQ3wXF5ZejNSKSwOnnEyW2MEMKhTskk=
-trpc.group/trpc-go/trpc-go v0.13.1-0.20230612122242-3cd3cd651406/go.mod h1:nDJo5sFj5cVDgndL5FV2n0C9kJUIbVYUA4E59ja9G3k=
-trpc.group/trpc/trpc-protocol/pb/go/trpc v0.1.2-0.20230530025122-c44533fe44bd h1:mFEoX5jBSSy/4a8HSGWreuGVaoj8fxc7eDgROTrMc7A=
-trpc.group/trpc/trpc-protocol/pb/go/trpc v0.1.2-0.20230530025122-c44533fe44bd/go.mod h1:K+a1K/Gnlcg9BFHWx30vLBIEDhxODhl25gi1JjA54CQ=
+trpc.group/trpc-go/tnet v0.0.0-20230810071536-9d05338021cf h1:Qo0p6ZJV60Qd5XajiIDidVgx1NDM9UHL7DzDKc2gqns=
+trpc.group/trpc-go/tnet v0.0.0-20230810071536-9d05338021cf/go.mod h1:s/webUFYWEFBHErKyFmj7LYC7XfC2LTLCcwfSnJ04M0=
+trpc.group/trpc-go/trpc-go v0.0.0-20230815084720-2337ef2e8e46 h1:IZLd2AT6LLbmxgBrHQPVvpejvdEfqNbzksWoGJj6RVI=
+trpc.group/trpc-go/trpc-go v0.0.0-20230815084720-2337ef2e8e46/go.mod h1:ve2YyZleGVbnKr0RLUJcu35dXw2zZmsi3RdKVPgL4+4=
+trpc.group/trpc/trpc-protocol/pb/go/trpc v0.0.0-20230803031059-de4168eb5952 h1:AhjP72IKa1YKnSIayk1X5xSzKrem0EanjZ7oMc2HYOw=
+trpc.group/trpc/trpc-protocol/pb/go/trpc v0.0.0-20230803031059-de4168eb5952/go.mod h1:K+a1K/Gnlcg9BFHWx30vLBIEDhxODhl25gi1JjA54CQ=

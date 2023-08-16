@@ -8,8 +8,8 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/stretchr/testify v1.8.0
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.38
-	trpc.group/trpc-go/trpc-go v0.13.1-0.20230612122242-3cd3cd651406
-	trpc.group/trpc/trpc-protocol/pb/go/trpc v0.1.2-0.20230530025122-c44533fe44bd
+	trpc.group/trpc-go/trpc-go v0.0.0-20230815084720-2337ef2e8e46
+	trpc.group/trpc/trpc-protocol/pb/go/trpc v0.0.0-20230803031059-de4168eb5952
 )
 
 require (
@@ -44,11 +44,10 @@ require (
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/arch v0.0.0-20200826200359-b19915210f00 // indirect
 	golang.org/x/net v0.5.0 // indirect
+	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/text v0.6.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	trpc.group/trpc-go/go_reuseport v1.7.1-0.20230423021710-f5eeff5d87a3 // indirect
-	trpc.group/trpc-go/jce v0.0.0-20230424070841-15a24b5c5646 // indirect
-	trpc.group/trpc-go/tnet v0.0.12-0.20230423031524-5eb1cc42f225 // indirect
+	trpc.group/trpc-go/tnet v0.0.0-20230810071536-9d05338021cf // indirect
 )

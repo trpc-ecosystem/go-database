@@ -26,10 +26,9 @@ var dbDsn = "user:password@tcp(localhost:5555)/dbname"
 // TestUnit_NewClientTransport_P0 NewClientTransport test case.
 func TestUnit_NewClientTransport_P0(t *testing.T) {
 	Convey("TestUnit_NewClientTransport_P0", t, func() {
-		opt := transport.WithClientUDPRecvSize(128)
-		ct := NewClientTransport(opt)
+		ct := NewClientTransport()
 		So(ct, ShouldResemble, &ClientTransport{
-			opts:        &transport.ClientTransportOptions{UDPRecvSize: 128},
+			opts:        &transport.ClientTransportOptions{},
 			dbs:         make(map[string]*sql.DB),
 			dblock:      sync.RWMutex{},
 			MaxIdle:     10,

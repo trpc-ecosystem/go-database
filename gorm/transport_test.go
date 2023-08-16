@@ -22,11 +22,10 @@ var clickhouseDsn = "dsn://tcp://localhost:9000/dbname"
 
 func TestUnit_NewClientTransport_P0(t *testing.T) {
 	Convey("TestUnit_NewClientTransport_P0", t, func() {
-		opt := transport.WithClientUDPRecvSize(128)
-		ctt := NewClientTransport(opt)
+		ctt := NewClientTransport()
 
 		So(ctt.opener, ShouldEqual, sql.Open)
-		So(ctt.opts, ShouldResemble, &transport.ClientTransportOptions{UDPRecvSize: 128})
+		So(ctt.opts, ShouldResemble, &transport.ClientTransportOptions{})
 		So(ctt.SQLDB, ShouldBeEmpty)
 		So(ctt.DefaultPoolConfig, ShouldResemble, PoolConfig{
 			MaxIdle:     10,

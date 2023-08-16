@@ -8,7 +8,6 @@ import (
 	miniredis "github.com/alicebob/miniredis/v2"
 	redis "github.com/redis/go-redis/v9"
 	goredis "trpc.group/trpc-go/trpc-database/goredis"
-	"trpc.group/trpc-go/trpc-database/goredis/internal/jce"
 	pb "trpc.group/trpc-go/trpc-database/goredis/internal/proto"
 	"trpc.group/trpc-go/trpc-go"
 	"trpc.group/trpc-go/trpc-go/client"
@@ -50,15 +49,6 @@ func TestSet(t *testing.T) {
 			args: args{
 				in:  "string",
 				out: &outString,
-			},
-		},
-		{
-			name: "jce",
-			args: args{
-				in: &jce.GetLevelReq{
-					Uin: 123456,
-				},
-				out: &jce.GetLevelReq{},
 			},
 		},
 		{
@@ -125,15 +115,6 @@ func TestHSet(t *testing.T) {
 			args: args{
 				in:  "string",
 				out: &outString,
-			},
-		},
-		{
-			name: "jce",
-			args: args{
-				in: &jce.GetLevelReq{
-					Uin: 123456,
-				},
-				out: &jce.GetLevelReq{},
 			},
 		},
 		{
