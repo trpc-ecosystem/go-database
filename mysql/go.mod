@@ -11,9 +11,9 @@ require (
 	github.com/smartystreets/goconvey v1.7.2
 	github.com/stretchr/testify v1.8.1
 	gopkg.in/yaml.v3 v3.0.1
-	trpc.group/trpc-go/trpc-go v0.0.0-20230815084720-2337ef2e8e46
-	trpc.group/trpc-go/trpc-selector-dsn v0.0.0-20230815091309-951ad98567f0
-	trpc.group/trpc-go/trpc-utils v0.0.0-20230811071342-970df85e2327
+	trpc.group/trpc-go/trpc-go v1.0.0
+	trpc.group/trpc-go/trpc-selector-dsn v1.0.0
+	trpc.group/trpc-go/trpc-utils v1.0.0
 )
 
 require (

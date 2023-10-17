@@ -1,11 +1,11 @@
-name: Gorm Pull Request Check
+name: Bigcache Pull Request Check
 on:
   pull_request:
     paths:
-      - 'gorm/**'
+      - 'bigcache/**'
   push:
     paths:
-      - 'gorm/**'
+      - 'bigcache/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,7 +19,7 @@ jobs:
       with:
         go-version: 1.19
     - name: Build
-      run: cd gorm && go build -v ./...
+      run: cd bigcache && go build -v ./...
     - name: Test
-      run: cd gorm && go test -v -gcflags=all=-l ./...
+      run: cd bigcache && go test -v -gcflags=all=-l ./...
    

@@ -14,8 +14,8 @@ require (
 	gorm.io/driver/mysql v1.3.4
 	gorm.io/driver/postgres v1.3.7
 	gorm.io/gorm v1.23.5
-	trpc.group/trpc-go/trpc-go v0.0.0-20230815084720-2337ef2e8e46
-	trpc.group/trpc-go/trpc-selector-dsn v0.0.0-20230815091309-951ad98567f0
+	trpc.group/trpc-go/trpc-go v1.0.0
+	trpc.group/trpc-go/trpc-selector-dsn v1.0.0
 )
 
 require (

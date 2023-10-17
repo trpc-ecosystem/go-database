@@ -8,8 +8,8 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/stretchr/testify v1.8.0
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.38
-	trpc.group/trpc-go/trpc-go v0.0.0-20230815084720-2337ef2e8e46
-	trpc.group/trpc/trpc-protocol/pb/go/trpc v0.0.0-20230803031059-de4168eb5952
+	trpc.group/trpc-go/trpc-go v1.0.0
+	trpc.group/trpc/trpc-protocol/pb/go/trpc v0.0.0-20231016075727-fe9df3a3b538
 )
 
 require (
@@ -22,14 +22,13 @@ require (
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/google/flatbuffers v2.0.0+incompatible // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.15.9 // indirect
 	github.com/lestrrat-go/strftime v1.0.6 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mozillazg/go-httpheader v0.2.1 // indirect
 	github.com/panjf2000/ants/v2 v2.4.6 // indirect
