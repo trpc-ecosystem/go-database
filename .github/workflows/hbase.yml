@@ -1,11 +1,11 @@
-name: Gorm Pull Request Check
+name: Hbase Pull Request Check
 on:
   pull_request:
     paths:
-      - 'gorm/**'
+      - 'hbase/**'
   push:
     paths:
-      - 'gorm/**'
+      - 'hbase/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,7 +19,7 @@ jobs:
       with:
         go-version: 1.19
     - name: Build
-      run: cd gorm && go build -v ./...
+      run: cd hbase && go build -v ./...
     - name: Test
-      run: cd gorm && go test -v -gcflags=all=-l ./...
+      run: cd hbase && go test -v -gcflags=all=-l ./...
    

@@ -9,8 +9,8 @@ require (
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/tsuna/gohbase v0.0.0-20201125011725-348991136365
 	gopkg.in/yaml.v3 v3.0.1
-	trpc.group/trpc-go/trpc-go v0.0.0-20230919115157-95737ac0b3e8
-	trpc.group/trpc-go/trpc-selector-dsn v0.0.0-20230828093907-26d74ca24285
+	trpc.group/trpc-go/trpc-go v1.0.0
+	trpc.group/trpc-go/trpc-selector-dsn v1.0.0
 )
 
 require (
