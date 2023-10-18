@@ -1,3 +1,5 @@
+[English](README.md) | 中文
+
 # tRPC-Go bigcache 插件
 
 封装社区的 [bigcache](https://github.com/allegro/bigcache) ，配合 trpc 使用。

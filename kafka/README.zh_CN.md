@@ -21,8 +21,8 @@ import (
   "time"
   "context"
 
-  "git.code.oa.com/trpc-go/trpc-database/kafka"
-  "git.code.oa.com/trpc-go/trpc-go/client"
+  "trpc.group/trpc-go/trpc-database/kafka"
+  "trpc.group/trpc-go/trpc-go/client"
 )
 
 func (s *server) SayHello(ctx context.Context, req *pb.ReqBody, rsp *pb.RspBody)( err error ) {
@@ -60,8 +60,8 @@ package main
 import (
   "context"
 
-  "git.code.oa.com/trpc-go/trpc-database/kafka"
-  trpc "git.code.oa.com/trpc-go/trpc-go"
+  "trpc.group/trpc-go/trpc-database/kafka"
+  trpc "trpc.group/trpc-go/trpc-go"
   "github.com/Shopify/sarama"
 )
 
@@ -90,8 +90,8 @@ func handle(ctx context.Context, msg *sarama.ConsumerMessage) error {
 import (
   "context"
  
-  "git.code.oa.com/trpc-go/trpc-database/kafka"
-  trpc "git.code.oa.com/trpc-go/trpc-go"
+  "trpc.group/trpc-go/trpc-database/kafka"
+  trpc "trpc.group/trpc-go/trpc-go"
   "github.com/Shopify/sarama"
 )
 
@@ -312,7 +312,7 @@ address: ip1:port1,ip2:port2?topics=topic1,topic2&mechanism=SCRAM-SHA-512&user={
 ```go
 import ( 
   // ... 
-  "git.code.oa.com/vicenteli/trpc-database/kafka"
+  "trpc.group/trpc-go/trpc-database/kafka"
   // ...
 )
 

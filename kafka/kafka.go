@@ -36,7 +36,6 @@ func init() {
 // you need to wait for all subcontracted messages to be consumed before starting business logic processing.
 // When the consumer's Handle method or msg.ServerRspErr returns this error,
 // It means that you want to continue to consume messages without commit ack and not treat them as errors.
-// specific scene reference issue:https://git.woa.com/trpc-go/trpc-database/issues/251
 var ContinueWithoutCommitError = &errs.Error{
 	Type: errs.ErrorTypeBusiness,
 	Code: errs.RetUnknown,

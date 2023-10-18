@@ -1,6 +1,6 @@
 # tRPC-Go go-redis plugin
 
-English | [中文](README_CN.md)
+English | [中文](README.zh_CN.md)
 
 ## Principle
 Use hook technology to expand the open source github.com/go-redis/redis.

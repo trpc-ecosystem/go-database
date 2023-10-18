@@ -1,3 +1,5 @@
+[English](README.md) | 中文
+
 # tRPC-Go clickhouse 插件
 
 ## clickhouse client 配置

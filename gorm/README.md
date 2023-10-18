@@ -1,6 +1,6 @@
 # Gorm trpc plugin
 
-English | [中文](README_CN.md)
+English | [中文](README.zh_CN.md)
 
 This plugin provides a wrapper for the Gorm in trpc, allowing you to use the native Gorm interface while reusing trpc's plugin ecosystem.
 
