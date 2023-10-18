@@ -1,6 +1,6 @@
 # tRPC-GO hbase 插件
 
-封装 [hbase](github.com/tsuna/gohbase)，配合 trpc 使用
+封装 [hbase](https://github.com/tsuna/gohbase)，配合 trpc 使用
 
 ## hbase client 框架配置
 ```yaml

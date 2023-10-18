@@ -1,6 +1,6 @@
 # tRPC-Go timer plugin
 
-English | [中文](README_CN.md)
+English | [中文](README.zh_CN.md)
 
 ## timer service
 
