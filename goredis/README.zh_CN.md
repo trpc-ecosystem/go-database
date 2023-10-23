@@ -2,7 +2,7 @@
 
 # tRPC-Go go-redis 插件
 
-[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/goredis/branch/main/graph/badge.svg)](https://app.codecov.io/gh/trpc-ecosystem/go-databse/goredis/tree/main)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/goredis/branch/main/graph/badge.svg)](https://app.codecov.io/gh/trpc-ecosystem/go-database/goredis/tree/main)
 
 ## 原理 
 对开源的 github.com/go-redis/redis 利用hook技术进行扩展, 从而增加对于trpc生态的支持。

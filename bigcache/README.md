@@ -1,6 +1,8 @@
+English | [中文](README.zh_CN.md)
+
 # tRPC-Go bigcache plugin
 
-[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/bigcache/branch/main/graph/badge.svg)](https://app.codecov.io/gh/trpc-ecosystem/go-databse/bigcache/tree/main)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/bigcache/branch/main/graph/badge.svg)](https://app.codecov.io/gh/trpc-ecosystem/go-database/bigcache/tree/main)
 
 Encapsulate the [bigcache](https://github.com/allegro/bigcache) library from the GitHub community to use with the tRPC-Go framework.
 
