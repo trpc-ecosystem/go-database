@@ -1,5 +1,7 @@
 # tRPC-Go bigcache plugin
 
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/bigcache/branch/main/graph/badge.svg)](https://app.codecov.io/gh/trpc-ecosystem/go-databse/bigcache/tree/main)
+
 Encapsulate the [bigcache](https://github.com/allegro/bigcache) library from the GitHub community to use with the tRPC-Go framework.
 
 > bigcache encapsulates a high-performance third-party local cache library in Golang. We enhances its functionality by adding support for additional value types, making it more convenient to use.

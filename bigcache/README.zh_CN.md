@@ -2,6 +2,9 @@
 
 # tRPC-Go bigcache 插件
 
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/bigcache/branch/main/graph/badge.svg)](https://app.codecov.io/gh/trpc-ecosystem/go-databse/bigcache/tree/main)
+
+
 封装社区的 [bigcache](https://github.com/allegro/bigcache) ，配合 trpc 使用。
 
 > bigcache 封装了 golang 下高效的本地缓存第三方库，封装增加了 value 支持的类型，以方便使用。
