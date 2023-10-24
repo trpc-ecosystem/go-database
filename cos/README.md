@@ -4,7 +4,7 @@ English | [中文](README.zh_CN.md)
 [![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/cos.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/cos)
 [![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/cos)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/cos)
 [![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/cos.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/cos.yml)
-[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=cos&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/cos)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=cos&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/cos)
 
 The COS client that adapts to the trpc-go framework. Service based on the trpc-go framework.
 

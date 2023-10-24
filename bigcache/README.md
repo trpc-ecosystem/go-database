@@ -5,7 +5,7 @@ English | [中文](README.zh_CN.md)
 [![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/bigcache.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/bigcache)
 [![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/bigcache)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/bigcache)
 [![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/bigcache.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/bigcache.yml)
-[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=bigcache&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/bigcache)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=bigcache&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/bigcache)
 
 Encapsulate the [bigcache](https://github.com/allegro/bigcache) library from the GitHub community to use with the tRPC-Go framework.
 

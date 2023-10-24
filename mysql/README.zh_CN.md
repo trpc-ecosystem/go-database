@@ -5,7 +5,7 @@
 [![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/mysql.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/mysql)
 [![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/mysql)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/mysql)
 [![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/mysql.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/mysql.yml)
-[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=mysql&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/mysql)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=mysql&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/mysql)
 
 ## 封装标准库原生 sql
 
