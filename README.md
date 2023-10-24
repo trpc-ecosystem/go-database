@@ -2,6 +2,8 @@ English | [中文](README.zh_CN.md)
 
 # tRPC-Go Database Plugin
 
+[![LICENSE](https://img.shields.io/badge/license-Apache--2.0-green.svg)](https://github.com/trpc-ecosystem/go-database/blob/main/LICENSE)
+
 In the daily development process, developers often need to access various storage systems such as MySQL, Redis, Kafka, etc., for database operations. While using open-source SDKs can fulfill the requirements for accessing databases, developers are responsible for handling naming routing, monitoring, and configuration themselves.
 
 Considering that tRPC-Go provides a variety of plugins for naming routing, monitoring, and configuration management, it is possible to wrap open-source SDKs to reuse tRPC-Go's capabilities and reduce redundant code. tRPC-Go offers encapsulation for some open-source SDKs, allowing you to directly leverage tRPC-Go's features for naming routing, monitoring, and more.

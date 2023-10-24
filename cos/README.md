@@ -1,10 +1,13 @@
-The COS client that adapts to the trpc-go framework.
-
 English | [中文](README.zh_CN.md)
 
 ### cos config
+[![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/cos.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/cos)
+[![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/cos)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/cos)
+[![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/cos.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/cos.yml)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=cos&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/cos)
 
-Service based on the trpc-go framework.
+The COS client that adapts to the trpc-go framework. Service based on the trpc-go framework.
+
 #### Tencent Cloud cos.Conf
 
 Add it to the trpc-go.yaml configuration, where Region can refer to the [Tencent Cloud documentation](https://cloud.tencent.com/document/product/436/6224).

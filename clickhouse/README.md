@@ -2,6 +2,11 @@ English | [中文](README.zh_CN.md)
 
 # tRPC-Go clickhouse plugin
 
+[![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/clickhouse.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/clickhouse)
+[![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/clickhouse)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/clickhouse)
+[![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/clickhouse.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/clickhouse.yml)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=clickhouse&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/clickhouse)
+
 ## Clickhouse client configuration
 > This project depends on clickhouse-go's v2 version, which is compatible with [v1 version dsn](https://github.com/ClickHouse/clickhouse-go /tree/v1#dsn), in order to prevent omissions, it is recommended to use [v2 version of dsn](https://github.com/ClickHouse/clickhouse-go#dsn).
 

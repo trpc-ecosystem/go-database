@@ -1,6 +1,11 @@
+[English](README.md) | 中文
+
 # tRPC-Go kafka 插件
 
-[English](README.md) | 中文
+[![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/kafka.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/kafka)
+[![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/kafka)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/kafka)
+[![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/kafka.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/kafka.yml)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=kafka&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/kafka)
 
 封装社区的 [sarama](https://github.com/Shopify/sarama) ，配合 trpc 使用。
 

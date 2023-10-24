@@ -21,5 +21,11 @@ jobs:
     - name: Build
       run: cd goredis && go build -v ./...
     - name: Test
-      run: cd goredis && go test -v -gcflags=all=-l ./...
-   
+      run: cd goredis && go test -v -coverprofile=coverage.out ./...
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./goredis/coverage.out
+        flags: goredis
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

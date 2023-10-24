@@ -21,5 +21,12 @@ jobs:
     - name: Build
       run: cd cos && go build -v ./...
     - name: Test
-      run: cd cos && go test -v -gcflags=all=-l ./...
+      run: cd cos && go test -v -coverprofile=coverage.out ./...
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./cos/coverage.out
+        flags: cos
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
    
