@@ -4,17 +4,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/agiledragon/gomonkey/v2"
 	miniredis "github.com/alicebob/miniredis/v2"
 	redis "github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
+	"trpc.group/trpc-go/trpc-database/goredis/internal/joinfilters"
+	"trpc.group/trpc-go/trpc-database/goredis/internal/options"
+	pb "trpc.group/trpc-go/trpc-database/goredis/internal/proto"
 	trpc "trpc.group/trpc-go/trpc-go"
 	"trpc.group/trpc-go/trpc-go/client"
 	"trpc.group/trpc-go/trpc-go/codec"
 	"trpc.group/trpc-go/trpc-go/errs"
+	"trpc.group/trpc-go/trpc-go/naming/selector"
 )
 
 var (
@@ -186,4 +193,37 @@ func TestDialHook(t *testing.T) {
 		}
 		t.Fatalf("%+v", err)
 	}
+}
+
+func Test_hook_DialHook(t *testing.T) {
+	filters, err := joinfilters.New("trpc.gamecenter.test.redis")
+	if err != nil {
+		t.Fatalf("%+v", err)
+	}
+	o := &options.Options{
+		Namespace: "Production",
+		Service:   "trpc.gamecenter.trpcproxy.TRPCProxy",
+		QueryOption: &pb.QueryOptions{
+			IsProxy: true,
+		},
+		RedisOption: &redis.UniversalOptions{
+			Addrs: []string{"127.0.0.1:6379"},
+		},
+	}
+	patches := gomonkey.ApplyFuncSeq(selector.Get, []gomonkey.OutputCell{
+		{Values: gomonkey.Params{selector.NewIPSelector()}},
+	})
+	defer patches.Reset()
+	h, err := newHook(filters, o)
+	if err != nil {
+		if runtime.GOOS == "linux" {
+			t.Fatalf("%+v", err)
+		}
+		t.Logf("%+v", err)
+		return
+	}
+	f := h.DialHook(func(ctx context.Context, network, addr string) (net.Conn, error) {
+		return nil, nil
+	})
+	_, _ = f(testCtx, "", "")
 }
