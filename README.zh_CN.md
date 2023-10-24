@@ -2,6 +2,8 @@
 
 # tRPC-Go Database 插件
 
+[![LICENSE](https://img.shields.io/badge/license-Apache--2.0-green.svg)](https://github.com/trpc-ecosystem/go-database/blob/main/LICENSE)
+
 在日常的开发过程中，开发者经常会访问 MySQL、Redis、Kafka 等存储进行数据库的读写。直接使用开源的 SDK 虽然可以满足访问数据库的需求，但是用户需要自己负责路由寻址、监控上报、配置的开发。
 
 考虑到 tRPC-Go 提供了多种多样的路由寻址、监控上报、配置管理的插件，我们可以封装一下开源的 SDK，复用 tRPC-Go 插件的能力，减少重复代码。tRPC-Go 提供了部分开源 SDK 的封装，可以直接复用 tRPC-Go 的路由寻址、监控上报等功能。

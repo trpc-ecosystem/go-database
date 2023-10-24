@@ -2,6 +2,9 @@ English | [中文](README.zh_CN.md)
 
 # tRPC-Go timer plugin
 
+[![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/timer.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/timer)
+[![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/timer)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/timer)
+[![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/timer.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/timer.yml)
 [![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=timer&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/timer)
 
 ## timer service

@@ -2,6 +2,9 @@
 
 # tRPC-Go clickhouse 插件
 
+[![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/clickhouse.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/clickhouse)
+[![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/clickhouse)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/clickhouse)
+[![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/clickhouse.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/clickhouse.yml)
 [![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=clickhouse&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/clickhouse)
 
 ## clickhouse client 配置
