@@ -5,7 +5,7 @@
 [![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/gorm.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/gorm)
 [![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/gorm)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/gorm)
 [![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/gorm.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/gorm.yml)
-[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=gorm&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/gorm)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=gorm&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/gorm)
 
 该插件实现了对Gorm ConnPool的trpc封装，可以使用原生Gorm接口同时复用trpc的插件生态
 
