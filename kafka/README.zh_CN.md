@@ -1,6 +1,8 @@
+[English](README.md) | 中文
+
 # tRPC-Go kafka 插件
 
-[English](README.md) | 中文
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=kafka&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/kafka)
 
 封装社区的 [sarama](https://github.com/Shopify/sarama) ，配合 trpc 使用。
 

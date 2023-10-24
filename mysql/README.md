@@ -1,6 +1,8 @@
+English | [中文](README.zh_CN.md)
+
 # tRPC-Go mysql plugin
 
-English | [中文](README.zh_CN.md)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=mysql&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/mysql)
 
 ## Wrapping Standard Library Native Sql
 

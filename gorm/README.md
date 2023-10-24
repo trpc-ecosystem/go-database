@@ -1,6 +1,8 @@
+English | [中文](README.zh_CN.md)
+
 # Gorm trpc plugin
 
-English | [中文](README.zh_CN.md)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=gorm&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/gorm)
 
 This plugin provides a wrapper for the Gorm in trpc, allowing you to use the native Gorm interface while reusing trpc's plugin ecosystem.
 

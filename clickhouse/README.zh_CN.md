@@ -2,6 +2,8 @@
 
 # tRPC-Go clickhouse 插件
 
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=clickhouse&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/clickhouse)
+
 ## clickhouse client 配置
 > 本项目依赖官方库 clickhouse-go 的 v2 版本，兼容了 [v1 版本的 dsn](https://github.com/ClickHouse/clickhouse-go/tree/v1#dsn)，为防止有疏漏，建议使用 [v2 版本的 dsn](https://github.com/ClickHouse/clickhouse-go#dsn)。
 

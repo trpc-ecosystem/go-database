@@ -1,6 +1,8 @@
+English | [中文](README.zh_CN.md)
+
 # tRPC-Go kafka plugin
 
-English | [中文](README.zh_CN.md)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=kafka&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/kafka)
 
 wrapping community [sarama](https://github.com/Shopify/sarama), used with trpc.
 

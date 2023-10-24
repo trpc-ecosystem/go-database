@@ -1,5 +1,7 @@
 # tRPC-GO hbase 插件
 
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=hbase&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/hbase)
+
 封装 [hbase](https://github.com/tsuna/gohbase)，配合 trpc 使用
 
 ## hbase client 框架配置

@@ -21,5 +21,12 @@ jobs:
     - name: Build
       run: cd kafka && go build -v ./...
     - name: Test
-      run: cd kafka && go test -v ./...
+      run: cd kafka && go test -v -coverprofile=coverage.out ./...
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./kafka/coverage.out
+        flags: kafka
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
    

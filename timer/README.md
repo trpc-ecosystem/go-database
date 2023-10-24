@@ -1,6 +1,8 @@
+English | [中文](README.zh_CN.md)
+
 # tRPC-Go timer plugin
 
-English | [中文](README.zh_CN.md)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=timer&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/timer)
 
 ## timer service
 

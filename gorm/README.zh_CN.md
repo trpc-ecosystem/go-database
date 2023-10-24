@@ -1,6 +1,8 @@
+[English](README.md) | 中文
+
 # Gorm trpc插件
 
-[English](README.md) | 中文
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=gorm&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/gorm)
 
 该插件实现了对Gorm ConnPool的trpc封装，可以使用原生Gorm接口同时复用trpc的插件生态
 

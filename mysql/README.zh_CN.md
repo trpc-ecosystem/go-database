@@ -1,6 +1,8 @@
+[English](README.md) | 中文
+
 # tRPC-Go mysql 插件
 
-[English](README.md) | 中文
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=mysql&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/mysql)
 
 ## 封装标准库原生 sql
 

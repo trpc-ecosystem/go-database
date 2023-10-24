@@ -1,10 +1,11 @@
-适配trpc-go框架的cos客户端
-
 [English](README.md) | 中文
 
 ### cos 配置
 
-基于trpc-go框架的服务
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=cos&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/cos)
+
+适配trpc-go框架的cos客户端。基于trpc-go框架的服务
+
 #### 腾讯云cos.Conf
 
 在配置trpc-go.yaml中加入,其中Region可参考[腾讯云文档](https://cloud.tencent.com/document/product/436/6224)
