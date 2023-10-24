@@ -2,7 +2,7 @@ English | [中文](README.zh_CN.md)
 
 # tRPC-Go go-redis plugin
 
-[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/goredis/branch/main/graph/badge.svg)](https://app.codecov.io/gh/trpc-ecosystem/go-database/goredis/tree/main)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=goredis&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/goredis)
 
 ## Principle
 Use hook technology to expand the open source github.com/go-redis/redis.

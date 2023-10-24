@@ -2,7 +2,7 @@
 
 # tRPC-Go bigcache 插件
 
-[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/bigcache/branch/main/graph/badge.svg)](https://app.codecov.io/gh/trpc-ecosystem/go-database/bigcache/tree/main)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/coverage/graph/badge.svg?flag=bigcache&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/coverage/bigcache)
 
 封装社区的 [bigcache](https://github.com/allegro/bigcache) ，配合 trpc 使用。
 
