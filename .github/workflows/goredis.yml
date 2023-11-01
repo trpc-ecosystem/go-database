@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'goredis/**'
+      - '.github/workflows/goredis.yml'
   push:
     paths:
       - 'goredis/**'
+      - '.github/workflows/goredis.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,7 +23,7 @@ jobs:
     - name: Build
       run: cd goredis && go build -v ./...
     - name: Test
-      run: cd goredis && go test -v -coverprofile=coverage.out ./...
+      run: cd goredis && go test -v -coverprofile=coverage.out -gcflags=all=-l ./...
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
       with:

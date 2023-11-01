@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'mysql/**'
+      - '.github/workflows/mysql.yml'
   push:
     paths:
       - 'mysql/**'
+      - '.github/workflows/mysql.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,7 +23,7 @@ jobs:
     - name: Build
       run: cd mysql && go build -v ./...
     - name: Test
-      run: cd mysql && go test -v -coverprofile=coverage.out ./...
+      run: cd mysql && go test -v -coverprofile=coverage.out -gcflags=all=-l ./...
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
       with:

@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'timer/**'
+      - '.github/workflows/timer.yml'
   push:
     paths:
       - 'timer/**'
+      - '.github/workflows/timer.yml'
   workflow_dispatch:
 permissions:
   contents: read

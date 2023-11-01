@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'clickhouse/**'
+      - '.github/workflows/clickhouse.yml'
   push:
     paths:
       - 'clickhouse/**'
+      - '.github/workflows/clickhouse.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,7 +23,7 @@ jobs:
     - name: Build
       run: cd clickhouse && go build -v ./...
     - name: Test
-      run: cd clickhouse && go test -v -coverprofile=coverage.out ./...
+      run: cd clickhouse && go test -v -coverprofile=coverage.out -gcflags=all=-l ./...
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
       with:

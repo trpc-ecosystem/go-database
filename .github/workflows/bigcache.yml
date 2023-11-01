@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'bigcache/**'
+      - '.github/workflows/bigcache.yml'
   push:
     paths:
       - 'bigcache/**'
+      - '.github/workflows/bigcache.yml'
   workflow_dispatch:
 permissions:
   contents: read
