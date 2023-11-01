@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'clickhouse/**'
+      - 'github/workflows/clickhouse.yml'
   push:
     paths:
       - 'clickhouse/**'
+      - 'github/workflows/clickhouse.yml'
   workflow_dispatch:
 permissions:
   contents: read

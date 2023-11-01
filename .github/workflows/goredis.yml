@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'goredis/**'
+      - 'github/workflows/goredis.yml'
   push:
     paths:
       - 'goredis/**'
+      - 'github/workflows/goredis.yml'
   workflow_dispatch:
 permissions:
   contents: read
