@@ -3,11 +3,11 @@ on:
   pull_request:
     paths:
       - 'cos/**'
-      - 'github/workflows/cos.yml'
+      - '.github/workflows/cos.yml'
   push:
     paths:
       - 'cos/**'
-      - 'github/workflows/cos.yml'
+      - '.github/workflows/cos.yml'
   workflow_dispatch:
 permissions:
   contents: read

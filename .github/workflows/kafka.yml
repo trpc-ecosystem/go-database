@@ -3,11 +3,11 @@ on:
   pull_request:
     paths:
       - 'kafka/**'
-      - 'github/workflows/kafka.yml'
+      - '.github/workflows/kafka.yml'
   push:
     paths:
       - 'kafka/**'
-      - 'github/workflows/kafka.yml'
+      - '.github/workflows/kafka.yml'
   workflow_dispatch:
 permissions:
   contents: read

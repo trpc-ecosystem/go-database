@@ -3,11 +3,11 @@ on:
   pull_request:
     paths:
       - 'gorm/**'
-      - 'github/workflows/gorm.yml'
+      - '.github/workflows/gorm.yml'
   push:
     paths:
       - 'gorm/**'
-      - 'github/workflows/gorm.yml'
+      - '.github/workflows/gorm.yml'
   workflow_dispatch:
 permissions:
   contents: read

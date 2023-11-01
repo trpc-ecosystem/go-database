@@ -3,11 +3,11 @@ on:
   pull_request:
     paths:
       - 'hbase/**'
-      - 'github/workflows/hbase.yml'
+      - '.github/workflows/hbase.yml'
   push:
     paths:
       - 'hbase/**'
-      - 'github/workflows/hbase.yml'
+      - '.github/workflows/hbase.yml'
   workflow_dispatch:
 permissions:
   contents: read
