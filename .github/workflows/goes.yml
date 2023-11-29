@@ -1,13 +1,13 @@
-name: Kafka Pull Request Check
+name: Goes Pull Request Check
 on:
   pull_request:
     paths:
-      - 'kafka/**'
-      - '.github/workflows/kafka.yml'
+      - 'goes/**'
+      - '.github/workflows/goes.yml'
   push:
     paths:
-      - 'kafka/**'
-      - '.github/workflows/kafka.yml'
+      - 'goes/**'
+      - '.github/workflows/goes.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,14 +21,13 @@ jobs:
       with:
         go-version: 1.19
     - name: Build
-      run: cd kafka && go build -v ./...
+      run: cd goes && go build -v ./...
     - name: Test
-      run: cd kafka && go test -v -coverprofile=coverage.out ./...
+      run: cd goes && go test -v -coverprofile=coverage.out ./...
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
       with:
-        files: ./kafka/coverage.out
-        flags: kafka
+        files: ./goes/coverage.out
+        flags: goes
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-   

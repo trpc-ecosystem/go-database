@@ -1,4 +1,11 @@
+[English](README.md) | 中文
+
 # tRPC-Go clickhouse 插件
+
+[![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/clickhouse.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/clickhouse)
+[![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/clickhouse)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/clickhouse)
+[![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/clickhouse.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/clickhouse.yml)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=clickhouse&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/clickhouse)
 
 ## clickhouse client 配置
 > 本项目依赖官方库 clickhouse-go 的 v2 版本，兼容了 [v1 版本的 dsn](https://github.com/ClickHouse/clickhouse-go/tree/v1#dsn)，为防止有疏漏，建议使用 [v2 版本的 dsn](https://github.com/ClickHouse/clickhouse-go#dsn)。

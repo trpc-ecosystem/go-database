@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'bigcache/**'
+      - '.github/workflows/bigcache.yml'
   push:
     paths:
       - 'bigcache/**'
+      - '.github/workflows/bigcache.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,5 +23,11 @@ jobs:
     - name: Build
       run: cd bigcache && go build -v ./...
     - name: Test
-      run: cd bigcache && go test -v -gcflags=all=-l ./...
-   
+      run: cd bigcache && go test -v -coverprofile=coverage.out ./...
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./bigcache/coverage.out
+        flags: bigcache
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

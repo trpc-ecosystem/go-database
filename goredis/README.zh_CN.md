@@ -1,6 +1,11 @@
+[English](README.md) | 中文
+
 # tRPC-Go go-redis 插件
 
-[English](README.md) | 中文
+[![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/goredis.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/goredis)
+[![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/goredis)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/goredis)
+[![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/goredis.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/goredis.yml)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=goredis&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/goredis)
 
 ## 原理 
 对开源的 github.com/go-redis/redis 利用hook技术进行扩展, 从而增加对于trpc生态的支持。

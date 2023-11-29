@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'cos/**'
+      - '.github/workflows/cos.yml'
   push:
     paths:
       - 'cos/**'
+      - '.github/workflows/cos.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,5 +23,12 @@ jobs:
     - name: Build
       run: cd cos && go build -v ./...
     - name: Test
-      run: cd cos && go test -v -gcflags=all=-l ./...
+      run: cd cos && go test -v -coverprofile=coverage.out -gcflags=-l ./...
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./cos/coverage.out
+        flags: cos
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
    

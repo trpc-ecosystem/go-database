@@ -1,6 +1,11 @@
+English | [中文](README.zh_CN.md)
+
 # tRPC-Go kafka plugin
 
-English | [中文](README_CN.md)
+[![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/kafka.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/kafka)
+[![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/kafka)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/kafka)
+[![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/kafka.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/kafka.yml)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=kafka&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/kafka)
 
 wrapping community [sarama](https://github.com/Shopify/sarama), used with trpc.
 

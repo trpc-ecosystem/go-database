@@ -1,6 +1,11 @@
+[English](README.md) | 中文
+
 # tRPC-Go kafka 插件
 
-[English](README.md) | 中文
+[![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/kafka.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/kafka)
+[![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/kafka)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/kafka)
+[![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/kafka.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/kafka.yml)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=kafka&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/kafka)
 
 封装社区的 [sarama](https://github.com/Shopify/sarama) ，配合 trpc 使用。
 
@@ -21,8 +26,8 @@ import (
   "time"
   "context"
 
-  "git.code.oa.com/trpc-go/trpc-database/kafka"
-  "git.code.oa.com/trpc-go/trpc-go/client"
+  "trpc.group/trpc-go/trpc-database/kafka"
+  "trpc.group/trpc-go/trpc-go/client"
 )
 
 func (s *server) SayHello(ctx context.Context, req *pb.ReqBody, rsp *pb.RspBody)( err error ) {
@@ -60,8 +65,8 @@ package main
 import (
   "context"
 
-  "git.code.oa.com/trpc-go/trpc-database/kafka"
-  trpc "git.code.oa.com/trpc-go/trpc-go"
+  "trpc.group/trpc-go/trpc-database/kafka"
+  trpc "trpc.group/trpc-go/trpc-go"
   "github.com/Shopify/sarama"
 )
 
@@ -90,8 +95,8 @@ func handle(ctx context.Context, msg *sarama.ConsumerMessage) error {
 import (
   "context"
  
-  "git.code.oa.com/trpc-go/trpc-database/kafka"
-  trpc "git.code.oa.com/trpc-go/trpc-go"
+  "trpc.group/trpc-go/trpc-database/kafka"
+  trpc "trpc.group/trpc-go/trpc-go"
   "github.com/Shopify/sarama"
 )
 
@@ -312,7 +317,7 @@ address: ip1:port1,ip2:port2?topics=topic1,topic2&mechanism=SCRAM-SHA-512&user={
 ```go
 import ( 
   // ... 
-  "git.code.oa.com/vicenteli/trpc-database/kafka"
+  "trpc.group/trpc-go/trpc-database/kafka"
   // ...
 )
 

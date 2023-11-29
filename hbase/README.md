@@ -1,6 +1,11 @@
 # tRPC-GO hbase 插件
 
-封装 [hbase](github.com/tsuna/gohbase)，配合 trpc 使用
+[![Go Reference](https://pkg.go.dev/badge/trpc.group/trpc-go/trpc-database/hbase.svg)](https://pkg.go.dev/trpc.group/trpc-go/trpc-database/hbase)
+[![Go Report Card](https://goreportcard.com/badge/trpc.group/trpc-go/trpc-database/hbase)](https://goreportcard.com/report/trpc.group/trpc-go/trpc-database/hbase)
+[![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/hbase.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/hbase.yml)
+[![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=hbase&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/hbase)
+
+封装 [hbase](https://github.com/tsuna/gohbase)，配合 trpc 使用
 
 ## hbase client 框架配置
 ```yaml

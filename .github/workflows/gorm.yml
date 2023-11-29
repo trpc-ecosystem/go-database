@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'gorm/**'
+      - '.github/workflows/gorm.yml'
   push:
     paths:
       - 'gorm/**'
+      - '.github/workflows/gorm.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,5 +23,12 @@ jobs:
     - name: Build
       run: cd gorm && go build -v ./...
     - name: Test
-      run: cd gorm && go test -v -gcflags=all=-l ./...
+      run: cd gorm && go test -v -coverprofile=coverage.out ./...
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./gorm/coverage.out
+        flags: gorm
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
    

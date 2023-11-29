@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'hbase/**'
+      - '.github/workflows/hbase.yml'
   push:
     paths:
       - 'hbase/**'
+      - '.github/workflows/hbase.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,5 +23,12 @@ jobs:
     - name: Build
       run: cd hbase && go build -v ./...
     - name: Test
-      run: cd hbase && go test -v -gcflags=all=-l ./...
+      run: cd hbase && go test -v -coverprofile=coverage.out -gcflags=all=-l ./...
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./hbase/coverage.out
+        flags: hbase
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
    
