@@ -48,10 +48,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"git.woa.com/trpc-go/trpc-database/goes"
+	"trpc.group/trpc-go/trpc-database/goes"
 	"github.com/elastic/go-elasticsearch/esapi"
 
-	pb "git.code.oa.com/trpcprotocol/test/helloworld"
+	pb "trpc.test.helloworld"
 )
 
 var body = map[string]interface{}{
