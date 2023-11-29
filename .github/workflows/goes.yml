@@ -1,0 +1,33 @@
+name: Goes Pull Request Check
+on:
+  pull_request:
+    paths:
+      - 'goes/**'
+      - '.github/workflows/goes.yml'
+  push:
+    paths:
+      - 'goes/**'
+      - '.github/workflows/goes.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v4
+      with:
+        go-version: 1.19
+    - name: Build
+      run: cd goes && go build -v ./...
+    - name: Test
+      run: cd goes && go test -v -coverprofile=coverage.out ./...
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./goes/coverage.out
+        flags: goes
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

@@ -18,4 +18,5 @@ Considering that tRPC-Go provides a variety of plugins for naming routing, monit
 | hbase | Wraps the open-source database [HBase SDK](https://github.com/tsuna/gohbase) |
 | kafka | Wraps the open-source Kafka message queue SDK [Sarama](https://github.com/IBM/sarama) |
 | mysql | Wraps the open-source database [MySQL Driver](https://github.com/go-sql-driver/mysql) |
+| goes | Wraps the open-source official go [ElasticSearch client](https://github.com/elastic/go-elasticsearch) |
 | timer | Local/distributed timer functionality |
