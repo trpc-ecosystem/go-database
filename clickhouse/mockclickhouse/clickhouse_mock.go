@@ -9,8 +9,8 @@ import (
 	sql "database/sql"
 	reflect "reflect"
 
-	clickhouse "trpc.group/trpc-go/trpc-database/clickhouse"
 	gomock "github.com/golang/mock/gomock"
+	clickhouse "trpc.group/trpc-go/trpc-database/clickhouse"
 )
 
 // MockClient is a mock of Client interface.

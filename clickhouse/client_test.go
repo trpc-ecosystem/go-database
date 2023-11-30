@@ -1,9 +1,3 @@
-/**
- * @author aceyugong <aceyugong@tencent.com>
- * @date 2022/7/4
- */
-
-// Package clickhouse packages standard library clickhouse.
 package clickhouse
 
 import (
