@@ -68,18 +68,33 @@ func (tgc *testGroupClaim) Messages() <-chan *sarama.ConsumerMessage {
 
 type testGroup struct{}
 
+// Consume implements sarama.ConsumerGroupHandler.
 func (tg testGroup) Consume(ctx context.Context, topics []string, handler sarama.ConsumerGroupHandler) error {
 	return nil
 }
 
+// Errors implements sarama.ConsumerGroupHandler.
 func (tg testGroup) Errors() <-chan error {
 	ec := make(chan error, 1)
 	return ec
 }
 
+// Close implements sarama.ConsumerGroupHandler.
 func (tg testGroup) Close() error {
 	return nil
 }
+
+// Pause implements sarama.ConsumerGroupHandler.
+func (tg testGroup) Pause(partitions map[string][]int32) {}
+
+// Resume implements sarama.ConsumerGroupHandler.
+func (tg testGroup) Resume(partitions map[string][]int32) {}
+
+// PauseAll implements sarama.ConsumerGroupHandler.
+func (tg testGroup) PauseAll() {}
+
+// ResumeAll implements sarama.ConsumerGroupHandler.
+func (tg testGroup) ResumeAll() {}
 
 type testGroupSession struct {
 	ctx    context.Context
@@ -127,6 +142,33 @@ func (tap testAsyncProducer) Close() error {
 	return nil
 }
 
+// TxnStatus return current producer transaction status.
+func (tap testAsyncProducer) TxnStatus() sarama.ProducerTxnStatusFlag {
+	return sarama.ProducerTxnFlagReady
+}
+
+// IsTransactional return true when current producer is transactional.
+func (tap testAsyncProducer) IsTransactional() bool { return false }
+
+// BeginTxn mark current transaction as ready.
+func (tap testAsyncProducer) BeginTxn() error { return nil }
+
+// CommitTxn commit current transaction.
+func (tap testAsyncProducer) CommitTxn() error { return nil }
+
+// AbortTxn abort current transaction.
+func (tap testAsyncProducer) AbortTxn() error { return nil }
+
+// AddOffsetsToTxn add associated offsets to current transaction.
+func (tap testAsyncProducer) AddOffsetsToTxn(offsets map[string][]*sarama.PartitionOffsetMetadata, groupId string) error {
+	return nil
+}
+
+// AddMessageToTxn add message offsets to current transaction.
+func (tap testAsyncProducer) AddMessageToTxn(msg *sarama.ConsumerMessage, groupId string, metadata *string) error {
+	return nil
+}
+
 func (tap testAsyncProducer) Input() chan<- *sarama.ProducerMessage {
 	ret := make(chan *sarama.ProducerMessage, 2)
 	return ret
@@ -147,6 +189,33 @@ type testBlockedAsyncProducer struct{}
 func (t testBlockedAsyncProducer) AsyncClose() {}
 
 func (t testBlockedAsyncProducer) Close() error {
+	return nil
+}
+
+// TxnStatus return current producer transaction status.
+func (t testBlockedAsyncProducer) TxnStatus() sarama.ProducerTxnStatusFlag {
+	return sarama.ProducerTxnFlagReady
+}
+
+// IsTransactional return true when current producer is transactional.
+func (t testBlockedAsyncProducer) IsTransactional() bool { return false }
+
+// BeginTxn mark current transaction as ready.
+func (t testBlockedAsyncProducer) BeginTxn() error { return nil }
+
+// CommitTxn commit current transaction.
+func (t testBlockedAsyncProducer) CommitTxn() error { return nil }
+
+// AbortTxn abort current transaction.
+func (t testBlockedAsyncProducer) AbortTxn() error { return nil }
+
+// AddOffsetsToTxn add associated offsets to current transaction.
+func (t testBlockedAsyncProducer) AddOffsetsToTxn(offsets map[string][]*sarama.PartitionOffsetMetadata, groupId string) error {
+	return nil
+}
+
+// AddMessageToTxn add message offsets to current transaction.
+func (t testBlockedAsyncProducer) AddMessageToTxn(msg *sarama.ConsumerMessage, groupId string, metadata *string) error {
 	return nil
 }
 
@@ -173,6 +242,33 @@ func (tsp testSyncProducer) SendMessages(msgs []*sarama.ProducerMessage) error {
 }
 
 func (tsp testSyncProducer) Close() error {
+	return nil
+}
+
+// TxnStatus return current producer transaction status.
+func (tsp testSyncProducer) TxnStatus() sarama.ProducerTxnStatusFlag {
+	return sarama.ProducerTxnFlagReady
+}
+
+// IsTransactional return true when current producer is transactional.
+func (tsp testSyncProducer) IsTransactional() bool { return false }
+
+// BeginTxn mark current transaction as ready.
+func (tsp testSyncProducer) BeginTxn() error { return nil }
+
+// CommitTxn commit current transaction.
+func (tsp testSyncProducer) CommitTxn() error { return nil }
+
+// AbortTxn abort current transaction.
+func (tsp testSyncProducer) AbortTxn() error { return nil }
+
+// AddOffsetsToTxn add associated offsets to current transaction.
+func (tsp testSyncProducer) AddOffsetsToTxn(offsets map[string][]*sarama.PartitionOffsetMetadata, groupId string) error {
+	return nil
+}
+
+// AddMessageToTxn add message offsets to current transaction.
+func (tsp testSyncProducer) AddMessageToTxn(msg *sarama.ConsumerMessage, groupId string, metadata *string) error {
 	return nil
 }
 
