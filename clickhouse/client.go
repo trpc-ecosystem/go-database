@@ -1,4 +1,3 @@
-// Package clickhouse 封装标准库clickhouse
 package clickhouse
 
 import (
