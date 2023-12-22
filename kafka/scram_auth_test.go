@@ -3,7 +3,7 @@ package kafka
 import (
 	"testing"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/golang/mock/gomock"
 	"github.com/xdg-go/scram"
 	"trpc.group/trpc-go/trpc-database/kafka/mockkafka"

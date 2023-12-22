@@ -6,7 +6,7 @@ import (
 	"crypto/sha512"
 	"hash"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"github.com/xdg-go/scram"
 	"trpc.group/trpc-go/trpc-go/errs"
 )

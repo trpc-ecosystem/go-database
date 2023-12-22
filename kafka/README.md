@@ -7,7 +7,7 @@ English | [中文](README.zh_CN.md)
 [![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/kafka.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/kafka.yml)
 [![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=kafka&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/kafka)
 
-wrapping community [sarama](https://github.com/Shopify/sarama), used with trpc.
+wrapping community [sarama](https://github.com/IBM/sarama), used with trpc.
 
 ## producer client
 
@@ -68,7 +68,7 @@ import (
 
   "trpc.group/trpc-go/trpc-database/kafka"
   trpc "trpc.group/trpc-go/trpc-go"
-  "github.com/Shopify/sarama"
+  "github.com/IBM/sarama"
 )
 
 func main() {
@@ -99,7 +99,7 @@ import (
  
   "trpc.group/trpc-go/trpc-database/kafka"
   trpc "trpc.group/trpc-go/trpc-go"
-  "github.com/Shopify/sarama"
+  "github.com/IBM/sarama"
 )
 
 func main() {

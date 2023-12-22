@@ -1,5 +1,5 @@
 /*
-Package kafka encapsulated from github.com/Shopify/sarama
+Package kafka encapsulated from github.com/IBM/sarama
 Producer sending through trpc.Client
 Implement Consumer logic through trpc.Service
 */
@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"golang.org/x/time/rate"
 	"trpc.group/trpc-go/trpc-go"
 	"trpc.group/trpc-go/trpc-go/codec"
