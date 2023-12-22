@@ -7,7 +7,7 @@
 [![Tests](https://github.com/trpc-ecosystem/go-database/actions/workflows/kafka.yml/badge.svg)](https://github.com/trpc-ecosystem/go-database/actions/workflows/kafka.yml)
 [![Coverage](https://codecov.io/gh/trpc-ecosystem/go-database/branch/main/graph/badge.svg?flag=kafka&precision=2)](https://app.codecov.io/gh/trpc-ecosystem/go-database/tree/main/kafka)
 
-封装社区的 [sarama](https://github.com/Shopify/sarama) ，配合 trpc 使用。
+封装社区的 [sarama](https://github.com/IBM/sarama) ，配合 trpc 使用。
 
 ## producer client
 
@@ -67,7 +67,7 @@ import (
 
   "trpc.group/trpc-go/trpc-database/kafka"
   trpc "trpc.group/trpc-go/trpc-go"
-  "github.com/Shopify/sarama"
+  "github.com/IBM/sarama"
 )
 
 func main() {
@@ -97,7 +97,7 @@ import (
  
   "trpc.group/trpc-go/trpc-database/kafka"
   trpc "trpc.group/trpc-go/trpc-go"
-  "github.com/Shopify/sarama"
+  "github.com/IBM/sarama"
 )
 
 func main() {

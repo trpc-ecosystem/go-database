@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"trpc.group/trpc-go/trpc-go/naming/discovery"
 	"trpc.group/trpc-go/trpc-go/naming/servicerouter"
 )
