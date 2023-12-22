@@ -1,4 +1,3 @@
-// Package clickhouse packages standard library clickhouse.
 package clickhouse
 
 import (
