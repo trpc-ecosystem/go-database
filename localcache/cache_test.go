@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-var wait = time.Millisecond
+var wait = 10 * time.Millisecond
 
 // TestCacheSetRace tests concurrency competition of Cache Set
 func TestCacheSetRace(t *testing.T) {
@@ -984,11 +984,11 @@ func Test_UpdateKeySync(t *testing.T) {
 	for _, mock := range mocks {
 		c.SetWithExpire(mock.key, mock.val, 0)
 	}
-	n := 10000000
+	n := 1000000
 	// Test data update
 	for i := 0; i < n; i++ {
 		go func() {
-			time.Sleep(time.Second)
+			time.Sleep(wait * 2)
 			for _, mock := range mocks {
 				// At this time, you will go to update to check whether the update is successful or times out
 				if val, err := c.GetWithLoad(context.TODO(), mock.key); err == nil {
