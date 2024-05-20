@@ -170,6 +170,12 @@ Copyright (c) 2013 Shopify
 10. go-sqlite3
 Copyright (c) 2014 Yasuhiro Matsumoto
 
+11. timingwheel
+Copyright (c) 2022 Luo Peng
+
+12. xxhash
+Copyright (c) 2016 Caleb Spare
+
 
 Terms of the MIT License:
 --------------------------------------------------------------------
