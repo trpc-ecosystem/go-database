@@ -12,7 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// mongoArgFilter mongo operation instruction
+// mongo operation instructions
 const (
 	mongoArgFilter               = "filter"
 	mongoArgSort                 = "sort"

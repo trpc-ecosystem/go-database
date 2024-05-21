@@ -27,7 +27,7 @@ type Config struct {
 	ReadPreference string        `yaml:"read_preference"` // reference on read
 }
 
-// MongoPlugin is used for plug-in default initialization,
+// mongoPlugin is used for plug-in default initialization,
 // used to load mongo proxy connection parameter configuration.
 type mongoPlugin struct{}
 
