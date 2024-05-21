@@ -12,28 +12,28 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// MongoArgFilter mongo operation instruction
+// mongoArgFilter mongo operation instruction
 const (
-	MongoArgFilter               = "filter"
-	MongoArgSort                 = "sort"
-	MongoArgSkip                 = "skip"
-	MongoArgLimit                = "limit"
-	MongoArgProjection           = "projection"
-	MongoArgBatchSize            = "batchSize"
-	MongoArgCollation            = "collation"
-	MongoArgUpdate               = "update"
-	MongoArgUpSert               = "upsert"
-	MongoArgDoc                  = "returnDocument"
-	MongoArgFieldName            = "fieldName"
-	MongoArgArrayFilters         = "arrayFilters"
-	MongoArgPipeline             = "pipeline"
-	MongoArgMaxTimeMS            = "maxTimeMS"
-	MongoArgAllowDiskUse         = "allowDiskUse"
-	MongoArgDropIndexesOptions   = "DropIndexesOptions"
-	MongoArgCreateIndexesOptions = "CreateIndexesOptions"
-	MongoArgIndexModels          = "IndexModels"
-	MongoArgIndexModel           = "IndexModel"
-	MongoArgName                 = "name"
+	mongoArgFilter               = "filter"
+	mongoArgSort                 = "sort"
+	mongoArgSkip                 = "skip"
+	mongoArgLimit                = "limit"
+	mongoArgProjection           = "projection"
+	mongoArgBatchSize            = "batchSize"
+	mongoArgCollation            = "collation"
+	mongoArgUpdate               = "update"
+	mongoArgUpSert               = "upsert"
+	mongoArgDoc                  = "returnDocument"
+	mongoArgFieldName            = "fieldName"
+	mongoArgArrayFilters         = "arrayFilters"
+	mongoArgPipeline             = "pipeline"
+	mongoArgMaxTimeMS            = "maxTimeMS"
+	mongoArgAllowDiskUse         = "allowDiskUse"
+	mongoArgDropIndexesOptions   = "DropIndexesOptions"
+	mongoArgCreateIndexesOptions = "CreateIndexesOptions"
+	mongoArgIndexModels          = "IndexModels"
+	mongoArgIndexModel           = "IndexModel"
+	mongoArgName                 = "name"
 )
 
 func executeFind(ctx context.Context, coll *mongo.Collection,
@@ -73,34 +73,34 @@ func handleArgsForExecuteFind(args map[string]interface{}) (filter map[string]in
 	opts = options.Find()
 	for name, opt := range args {
 		switch name {
-		case MongoArgFilter:
+		case mongoArgFilter:
 			if v, ok := opt.(map[string]interface{}); ok {
 				filter = v
 			}
-		case MongoArgSort:
+		case mongoArgSort:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetSort(v)
 			}
 			if v, ok := opt.(bson.D); ok {
 				opts = opts.SetSort(v)
 			}
-		case MongoArgSkip:
+		case mongoArgSkip:
 			if v, ok := opt.(float64); ok {
 				opts = opts.SetSkip(int64(v))
 			}
-		case MongoArgLimit:
+		case mongoArgLimit:
 			if v, ok := opt.(float64); ok {
 				opts = opts.SetLimit(int64(v))
 			}
-		case MongoArgProjection:
+		case mongoArgProjection:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetProjection(v)
 			}
-		case MongoArgBatchSize:
+		case mongoArgBatchSize:
 			if v, ok := opt.(float64); ok {
 				opts = opts.SetBatchSize(int32(v))
 			}
-		case MongoArgCollation:
+		case mongoArgCollation:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetCollation(collationFromMap(v))
 			}
@@ -116,11 +116,11 @@ func executeDeleteOne(ctx context.Context, coll *mongo.Collection,
 	var filter map[string]interface{}
 	for name, opt := range args {
 		switch name {
-		case MongoArgFilter:
+		case mongoArgFilter:
 			if v, ok := opt.(map[string]interface{}); ok {
 				filter = v
 			}
-		case MongoArgCollation:
+		case mongoArgCollation:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetCollation(collationFromMap(v))
 			}
@@ -145,11 +145,11 @@ func executeDeleteMany(ctx context.Context, coll *mongo.Collection,
 	var filter map[string]interface{}
 	for name, opt := range margs {
 		switch name {
-		case MongoArgFilter:
+		case mongoArgFilter:
 			if v, ok := opt.(map[string]interface{}); ok {
 				filter = v
 			}
-		case MongoArgCollation:
+		case mongoArgCollation:
 			if v, ok := opt.(map[string]interface{}); ok {
 				mopts = mopts.SetCollation(collationFromMap(v))
 			}
@@ -174,22 +174,22 @@ func executeFindOneAndDelete(ctx context.Context, coll *mongo.Collection,
 	var filter map[string]interface{}
 	for name, opt := range args {
 		switch name {
-		case MongoArgFilter:
+		case mongoArgFilter:
 			if v, ok := opt.(map[string]interface{}); ok {
 				filter = v
 			}
-		case MongoArgSort:
+		case mongoArgSort:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetSort(v)
 			}
 			if v, ok := opt.(bson.D); ok {
 				opts = opts.SetSort(v)
 			}
-		case MongoArgProjection:
+		case mongoArgProjection:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetProjection(v)
 			}
-		case MongoArgCollation:
+		case mongoArgCollation:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetCollation(collationFromMap(v))
 			}
@@ -239,11 +239,11 @@ func handleArgsForOneAndUpdateS(args map[string]interface{}) (filter map[string]
 	fopts = options.FindOneAndUpdate()
 	for name, opt := range args {
 		switch name {
-		case MongoArgFilter:
+		case mongoArgFilter:
 			if v, ok := opt.(map[string]interface{}); ok {
 				filter = v
 			}
-		case MongoArgUpdate:
+		case mongoArgUpdate:
 			var ok bool
 			update, ok = opt.(map[string]interface{})
 			if !ok {
@@ -251,32 +251,32 @@ func handleArgsForOneAndUpdateS(args map[string]interface{}) (filter map[string]
 					fupdatePipe = v
 				}
 			}
-		case MongoArgArrayFilters:
+		case mongoArgArrayFilters:
 			if v, ok := opt.([]interface{}); ok {
 				fopts = fopts.SetArrayFilters(options.ArrayFilters{
 					Filters: v,
 				})
 			}
-		case MongoArgSort:
+		case mongoArgSort:
 			if v, ok := opt.(map[string]interface{}); ok {
 				fopts = fopts.SetSort(v)
 			}
 			if v, ok := opt.(bson.D); ok {
 				fopts = fopts.SetSort(v)
 			}
-		case MongoArgProjection:
+		case mongoArgProjection:
 			if v, ok := opt.(map[string]interface{}); ok {
 				fopts = fopts.SetProjection(v)
 			}
-		case MongoArgUpSert:
+		case mongoArgUpSert:
 			if v, ok := opt.(bool); ok {
 				fopts = fopts.SetUpsert(v)
 			}
-		case MongoArgDoc:
+		case mongoArgDoc:
 			if v, ok := opt.(string); ok {
 				fopts = setReturnDocument(fopts, v)
 			}
-		case MongoArgCollation:
+		case mongoArgCollation:
 			if v, ok := opt.(map[string]interface{}); ok {
 				fopts = fopts.SetCollation(collationFromMap(v))
 			}
@@ -360,28 +360,28 @@ func executeUpdateOne(ctx context.Context, coll *mongo.Collection,
 	var ok bool
 	for name, opt := range args {
 		switch name {
-		case MongoArgFilter:
+		case mongoArgFilter:
 			if v, ok1 := opt.(map[string]interface{}); ok1 {
 				ufilter = v
 			}
-		case MongoArgUpdate:
+		case mongoArgUpdate:
 			update, ok = opt.(map[string]interface{})
 			if !ok {
 				if v, ok := opt.([]interface{}); ok {
 					updatePipe = v
 				}
 			}
-		case MongoArgArrayFilters:
+		case mongoArgArrayFilters:
 			if v, ok := opt.([]interface{}); ok {
 				uopts = uopts.SetArrayFilters(options.ArrayFilters{
 					Filters: v,
 				})
 			}
-		case MongoArgUpSert:
+		case mongoArgUpSert:
 			if v, ok := opt.(bool); ok {
 				uopts = uopts.SetUpsert(v)
 			}
-		case MongoArgCollation:
+		case mongoArgCollation:
 			if v, ok := opt.(map[string]interface{}); ok {
 				uopts = uopts.SetCollation(collationFromMap(v))
 			}
@@ -416,28 +416,28 @@ func executeUpdateMany(ctx context.Context, coll *mongo.Collection,
 	var ok bool
 	for name, opt := range args {
 		switch name {
-		case MongoArgFilter:
+		case mongoArgFilter:
 			if v, ok1 := opt.(map[string]interface{}); ok1 {
 				filter = v
 			}
-		case MongoArgUpdate:
+		case mongoArgUpdate:
 			update, ok = opt.(map[string]interface{})
 			if !ok {
 				if v, ok := opt.([]interface{}); ok {
 					updatePipe = v
 				}
 			}
-		case MongoArgArrayFilters:
+		case mongoArgArrayFilters:
 			if v, ok := opt.([]interface{}); ok {
 				opts = opts.SetArrayFilters(options.ArrayFilters{
 					Filters: v,
 				})
 			}
-		case MongoArgUpSert:
+		case mongoArgUpSert:
 			if v, ok := opt.(bool); ok {
 				opts = opts.SetUpsert(v)
 			}
-		case MongoArgCollation:
+		case mongoArgCollation:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetCollation(collationFromMap(v))
 			}
@@ -468,19 +468,19 @@ func executeCount(ctx context.Context, coll *mongo.Collection, args map[string]i
 	opts := options.Count()
 	for name, opt := range args {
 		switch name {
-		case MongoArgFilter:
+		case mongoArgFilter:
 			if v, ok := opt.(map[string]interface{}); ok {
 				filter = v
 			}
-		case MongoArgSkip:
+		case mongoArgSkip:
 			if v, ok := opt.(float64); ok {
 				opts = opts.SetSkip(int64(v))
 			}
-		case MongoArgLimit:
+		case mongoArgLimit:
 			if v, ok := opt.(float64); ok {
 				opts = opts.SetLimit(int64(v))
 			}
-		case MongoArgCollation:
+		case mongoArgCollation:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetCollation(collationFromMap(v))
 			}
@@ -497,15 +497,15 @@ func executeDistinct(ctx context.Context, coll *mongo.Collection,
 	opts := options.Distinct()
 	for name, opt := range args {
 		switch name {
-		case MongoArgFilter:
+		case mongoArgFilter:
 			if v, ok := opt.(map[string]interface{}); ok {
 				filter = v
 			}
-		case MongoArgFieldName:
+		case mongoArgFieldName:
 			if v, ok := opt.(string); ok {
 				fieldName = v
 			}
-		case MongoArgCollation:
+		case mongoArgCollation:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetCollation(collationFromMap(v))
 			}
@@ -542,21 +542,21 @@ func executeAggregateC(ctx context.Context, coll *mongo.Collection, args map[str
 	for name, opt := range args {
 		switch name {
 
-		case MongoArgPipeline:
+		case mongoArgPipeline:
 			p, ok := opt.([]interface{})
 			if !ok {
 				return nil, fmt.Errorf("Aggregate args error,args value need slice")
 			}
 			pipeline = p
-		case MongoArgBatchSize:
+		case mongoArgBatchSize:
 			if v, ok := opt.(float64); ok {
 				opts = opts.SetBatchSize(int32(v))
 			}
-		case MongoArgCollation:
+		case mongoArgCollation:
 			if v, ok := opt.(map[string]interface{}); ok {
 				opts = opts.SetCollation(collationFromMap(v))
 			}
-		case MongoArgMaxTimeMS:
+		case mongoArgMaxTimeMS:
 			if v, ok := opt.(float64); ok {
 				opts = opts.SetMaxTime(time.Duration(v) * time.Millisecond)
 			}
@@ -654,7 +654,7 @@ func executeBulkWrite(ctx context.Context, coll *mongo.Collection, args map[stri
 }
 
 func executeIndexCreateOne(ctx context.Context, iv mongo.IndexView, args map[string]interface{}) (string, error) {
-	indexModel, ok := args[MongoArgIndexModel]
+	indexModel, ok := args[mongoArgIndexModel]
 	if !ok {
 		return "", errors.New("CreateOne args error,need key IndexModel")
 	}
@@ -663,7 +663,7 @@ func executeIndexCreateOne(ctx context.Context, iv mongo.IndexView, args map[str
 		return "", errors.New("IndexModel document type error,need mongo.IndexModel")
 	}
 	createIndexesOption := &options.CreateIndexesOptions{}
-	if optRaw, ok := args[MongoArgCreateIndexesOptions]; ok {
+	if optRaw, ok := args[mongoArgCreateIndexesOptions]; ok {
 		if opt, ok := optRaw.(*options.CreateIndexesOptions); ok {
 			createIndexesOption = opt
 		}
@@ -672,7 +672,7 @@ func executeIndexCreateOne(ctx context.Context, iv mongo.IndexView, args map[str
 }
 
 func executeIndexCreateMany(ctx context.Context, iv mongo.IndexView, args map[string]interface{}) ([]string, error) {
-	indexModels, ok := args[MongoArgIndexModels]
+	indexModels, ok := args[mongoArgIndexModels]
 	if !ok {
 		return nil, errors.New("CreateMany args error,need key IndexModels")
 	}
@@ -681,7 +681,7 @@ func executeIndexCreateMany(ctx context.Context, iv mongo.IndexView, args map[st
 		return nil, errors.New("IndexModel document type error,need []mongo.IndexModel")
 	}
 	createIndexesOption := &options.CreateIndexesOptions{}
-	if optRaw, ok := args[MongoArgCreateIndexesOptions]; ok {
+	if optRaw, ok := args[mongoArgCreateIndexesOptions]; ok {
 		if opt, ok := optRaw.(*options.CreateIndexesOptions); ok {
 			createIndexesOption = opt
 		}
@@ -690,7 +690,7 @@ func executeIndexCreateMany(ctx context.Context, iv mongo.IndexView, args map[st
 }
 
 func executeIndexDropOne(ctx context.Context, iv mongo.IndexView, args map[string]interface{}) (bson.Raw, error) {
-	nameObj, ok := args[MongoArgName]
+	nameObj, ok := args[mongoArgName]
 	if !ok {
 		return nil, errors.New("DropOn args error,need key name")
 	}
@@ -699,7 +699,7 @@ func executeIndexDropOne(ctx context.Context, iv mongo.IndexView, args map[strin
 		return nil, errors.New("IndexModel document type error,need string")
 	}
 	dropIndexesOption := &options.DropIndexesOptions{}
-	if optRaw, ok := args[MongoArgDropIndexesOptions]; ok {
+	if optRaw, ok := args[mongoArgDropIndexesOptions]; ok {
 		if opt, ok := optRaw.(*options.DropIndexesOptions); ok {
 			dropIndexesOption = opt
 		}
@@ -709,7 +709,7 @@ func executeIndexDropOne(ctx context.Context, iv mongo.IndexView, args map[strin
 
 func executeIndexDropAll(ctx context.Context, iv mongo.IndexView, args map[string]interface{}) (bson.Raw, error) {
 	dropIndexesOption := &options.DropIndexesOptions{}
-	if optRaw, ok := args[MongoArgDropIndexesOptions]; ok {
+	if optRaw, ok := args[mongoArgDropIndexesOptions]; ok {
 		if opt, ok := optRaw.(*options.DropIndexesOptions); ok {
 			dropIndexesOption = opt
 		}

@@ -16,7 +16,7 @@ const (
 )
 
 func init() {
-	plugin.Register(pluginName, &MongoPlugin{})
+	plugin.Register(pluginName, &mongoPlugin{})
 }
 
 // Config mongo is a proxy configuration structure declaration.
@@ -29,15 +29,15 @@ type Config struct {
 
 // MongoPlugin is used for plug-in default initialization,
 // used to load mongo proxy connection parameter configuration.
-type MongoPlugin struct{}
+type mongoPlugin struct{}
 
 // Type is plugin type.
-func (m *MongoPlugin) Type() string {
+func (m *mongoPlugin) Type() string {
 	return pluginType
 }
 
 // Setup is plugin initialization.
-func (m *MongoPlugin) Setup(name string, configDesc plugin.Decoder) (err error) {
+func (m *mongoPlugin) Setup(name string, configDesc plugin.Decoder) (err error) {
 	var config Config // yaml database:mongo connection configuration parameters
 	if err = configDesc.Decode(&config); err != nil {
 		return

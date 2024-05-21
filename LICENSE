@@ -74,6 +74,9 @@ Source code of this software can be obtained from: github.com/golang/mock
 Copyright 2018 by David A. Golden. All rights reserved.
 Source code of this software can be obtained from: github.com/xdg-go/scram
 
+3. mongo-driver
+Copyright (C) MongoDB, Inc. 2017-present.
+Source code of this software can be obtained from: github.com/mongodb/mongo-go-driver
 
 Terms of the Apache License Version 2.0:
 --------------------------------------------------------------------
@@ -156,7 +159,6 @@ Copyright (c) supermonkey original author and authors
 
 6. cos-go-sdk-v5
 Copyright (c) 2017 mozillazg
-
 
 7. miniredis
 Copyright (c) 2014 Harmen

@@ -16,7 +16,7 @@ import (
 // TestUnit_MongoPlugin_Type_P0 MongoPlugin.Type is test case.
 func TestUnit_MongoPlugin_Type_P0(t *testing.T) {
 	Convey("TestUnit_MongoPlugin_Type_P0", t, func() {
-		mongoPlugin := new(MongoPlugin)
+		mongoPlugin := new(mongoPlugin)
 		So(mongoPlugin.Type(), ShouldEqual, pluginType)
 	})
 }
@@ -24,7 +24,7 @@ func TestUnit_MongoPlugin_Type_P0(t *testing.T) {
 // TestUnit_MongoPlugin_Setup_P0 MongoPlugin.Setup is test case.
 func TestUnit_MongoPlugin_Setup_P0(t *testing.T) {
 	Convey("TestUnit_MongoPlugin_Setup_P0", t, func() {
-		mp := &MongoPlugin{}
+		mp := &mongoPlugin{}
 		Convey("Config Decode Fail", func() {
 			err := mp.Setup(pluginName, &plugin.YamlNodeDecoder{Node: nil})
 			So(err, ShouldNotBeNil)
@@ -60,7 +60,7 @@ plugins:
 func TestUnit_MongoPlugin_Setup_Fail(t *testing.T) {
 
 	Convey("TestUnit_MongoPlugin_Setup_Fail", t, func() {
-		mp := &MongoPlugin{}
+		mp := &mongoPlugin{}
 		Convey("Config Decode Fail", func() {
 			err := mp.Setup(pluginName, &plugin.YamlNodeDecoder{Node: nil})
 			So(err, ShouldNotBeNil)
@@ -101,7 +101,7 @@ func TestUnit_MongoPlugin_Setup_New_READF_Failed(t *testing.T) {
 	).Reset()
 
 	Convey("TestUnit_MongoPlugin_Setup_P0", t, func() {
-		mp := &MongoPlugin{}
+		mp := &mongoPlugin{}
 		Convey("Config Decode Fail", func() {
 			err := mp.Setup(pluginName, &plugin.YamlNodeDecoder{Node: nil})
 			So(err, ShouldNotBeNil)

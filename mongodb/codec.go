@@ -9,12 +9,12 @@ import (
 )
 
 func init() {
-	codec.Register("mongodb", nil, DefaultClientCodec)
+	codec.Register("mongodb", nil, defaultClientCodec)
 }
 
 // default codec
 var (
-	DefaultClientCodec = &ClientCodec{}
+	defaultClientCodec = &ClientCodec{}
 )
 
 // ClientCodec decodes mongodb client request.
