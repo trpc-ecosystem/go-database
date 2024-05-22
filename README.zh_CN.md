@@ -13,9 +13,11 @@
 | bigcache | 封装开源本地缓存数据库 [Bigcache](https://github.com/allegro/bigcache) |
 | clickhouse | 封装开源数据库 [Clickhouse SDK](https://github.com/ClickHouse/clickhouse-go) |
 | cos | 封装腾讯云对象存储 [COS SDK](https://github.com/tencentyun/cos-go-sdk-v5) |
+| goes | 封装开源官方 Go [ElasticSearch client](https://github.com/elastic/go-elasticsearch) |
 | goredis | 封装内存数据库 [Redis SDK](https://github.com/redis/go-redis) |
 | gorm | 封装 Golang ORM 库 [GORM](https://github.com/go-gorm/gorm) |
 | hbase | 封装开源数据库 [HBase SDK](https://github.com/tsuna/gohbase) |
 | kafka | 封装开源消息队列 Kafka SDK [Sarama](https://github.com/IBM/sarama) |
+| mongodb | 封装开源数据库 [MongoDB Driver](https://go.mongodb.org/mongo-driver/mongo) |
 | mysql | 封装开源数据库 [Mysql Driver](https://github.com/go-sql-driver/mysql) |
 | timer | 本地/分布式定时器 |
