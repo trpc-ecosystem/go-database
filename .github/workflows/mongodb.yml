@@ -1,0 +1,33 @@
+name: Mongodb Pull Request Check
+on:
+  pull_request:
+    paths:
+      - 'mongodb/**'
+      - '.github/workflows/mongodb.yml'
+  push:
+    paths:
+      - 'mongodb/**'
+      - '.github/workflows/mongodb.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v4
+      with:
+        go-version: 1.19
+    - name: Build
+      run: cd mongodb && go build -v ./...
+    - name: Test
+      run: cd mongodb && go test -v -coverprofile=coverage.out -gcflags=all=-l -run Unit ./...
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./mongodb/coverage.out
+        flags: mongodb
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

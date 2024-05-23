@@ -13,10 +13,11 @@ Considering that tRPC-Go provides a variety of plugins for naming routing, monit
 | bigcache | Wraps the open-source local caching database [Bigcache](https://github.com/allegro/bigcache) |
 | clickhouse | Wraps the open-source database [Clickhouse SDK](https://github.com/ClickHouse/clickhouse-go) |
 | cos | Wraps Tencent Cloud Object Storage [COS SDK](https://github.com/tencentyun/cos-go-sdk-v5) |
+| goes | Wraps the open-source official Go [ElasticSearch client](https://github.com/elastic/go-elasticsearch) |
 | goredis | Wraps the in-memory database [Redis SDK](https://github.com/redis/go-redis) |
 | gorm | Wraps the Golang ORM library [GORM](https://github.com/go-gorm/gorm) |
 | hbase | Wraps the open-source database [HBase SDK](https://github.com/tsuna/gohbase) |
 | kafka | Wraps the open-source Kafka message queue SDK [Sarama](https://github.com/IBM/sarama) |
+| mongodb | Wraps the open-source database [MongoDB Driver](https://go.mongodb.org/mongo-driver/mongo) |
 | mysql | Wraps the open-source database [MySQL Driver](https://github.com/go-sql-driver/mysql) |
-| goes | Wraps the open-source official go [ElasticSearch client](https://github.com/elastic/go-elasticsearch) |
 | timer | Local/distributed timer functionality |
