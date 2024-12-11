@@ -24,6 +24,7 @@ func newConfigParsers() map[string]configParseFunc {
 	parserBasicConfig(m)
 	parserAdvanceConfig(m)
 	parserBatchConfig(m)
+	parserMetadataConfig(m)
 	parserAuthConfig(m)
 	parserDiscoverConfig(m)
 	return m
@@ -214,6 +215,52 @@ func parserBatchConfig(m map[string]configParseFunc) {
 		var err error
 		config.RetryInterval, err = parseRetryInterval(val)
 		config.ProducerRetry.RetryInterval = config.RetryInterval
+		return err
+	}
+}
+
+func parserMetadataConfig(m map[string]configParseFunc) {
+	m["metadataRetryMax"] = func(config *UserConfig, s string) error {
+		metadataRetryMax, err := strconv.Atoi(s)
+		if err != nil {
+			return err
+		}
+		if metadataRetryMax < 0 {
+			return errors.New("param not support: metadataRetryMax expect a value of no less than 0")
+		}
+		config.MetadataRetryMax = metadataRetryMax
+		return nil
+	}
+	m["metadataRetryBackoff"] = func(config *UserConfig, s string) error {
+		metadataRetryBackoff, err := strconv.Atoi(s)
+		if err != nil {
+			return err
+		}
+		if metadataRetryBackoff < 0 {
+			return errors.New("param not support: metadataRetryBackoff expect a value of no less than 0")
+		}
+		config.MetadataRetryBackoff = time.Duration(metadataRetryBackoff) * time.Millisecond
+		return nil
+	}
+	m["metadataRefreshFrequency"] = func(config *UserConfig, s string) error {
+		metadataRefreshFrequency, err := strconv.Atoi(s)
+		if err != nil {
+			return err
+		}
+		if metadataRefreshFrequency < 0 {
+			return errors.New("param not support: metadataRefreshFrequency expect a value of no less than 0")
+		}
+		config.MetadataRefreshFrequency = time.Duration(metadataRefreshFrequency) * time.Second
+		return nil
+	}
+	m["metadataFull"] = func(config *UserConfig, s string) error {
+		var err error
+		config.MetadataFull, err = strconv.ParseBool(s)
+		return err
+	}
+	m["metadataAllowAutoTopicCreation"] = func(config *UserConfig, s string) error {
+		var err error
+		config.MetadataAllowAutoTopicCreation, err = strconv.ParseBool(s)
 		return err
 	}
 }
