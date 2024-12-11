@@ -104,7 +104,7 @@ func (uc *UserConfig) getServerConfig() *sarama.Config {
 	sc.Consumer.Fetch.Max = int32(uc.FetchMax)
 	sc.Consumer.Offsets.Initial = uc.Initial
 	sc.Consumer.Offsets.AutoCommit.Interval = 3 * time.Second // How often to submit consumption progress
-	sc.Consumer.Group.Rebalance.Strategy = uc.Strategy
+	sc.Consumer.Group.Rebalance.GroupStrategies = []sarama.BalanceStrategy{uc.Strategy}
 	sc.Consumer.Group.Rebalance.Timeout = uc.GroupRebalanceTimeout
 	sc.Consumer.Group.Rebalance.Retry.Max = uc.GroupRebalanceRetryMax
 	sc.Consumer.Group.Session.Timeout = uc.GroupSessionTimeout
@@ -136,30 +136,31 @@ func GetDefaultConfig() *UserConfig {
 		// The maximum waiting time for a single consumption pull request.
 		// The maximum wait time will only wait if there is no recent data.
 		// This value should be set larger to reduce the consumption of empty requests on the QPS of the server.
-		MaxWaitTime:                    time.Second,
-		RequiredAcks:                   sarama.WaitForAll,
-		ReturnSuccesses:                true,
-		Timeout:                        time.Second, // Maximum request processing time on the server side
-		MaxMessageBytes:                131072,      // CDMQ set up
-		FlushMessages:                  0,
-		FlushMaxMessages:               0,
-		FlushBytes:                     0,
-		FlushFrequency:                 0,
-		BatchConsumeCount:              0,
-		BatchFlush:                     2 * time.Second,
-		ScramClient:                    nil,
-		MaxRetry:                       0, // Unlimited retries, compatible with historical situations
-		NetMaxOpenRequests:             5,
-		MaxProcessingTime:              100 * time.Millisecond,
-		NetDailTimeout:                 30 * time.Second,
-		NetReadTimeout:                 30 * time.Second,
-		NetWriteTimeout:                30 * time.Second,
-		GroupSessionTimeout:            10 * time.Second,
-		GroupRebalanceTimeout:          60 * time.Second,
-		GroupRebalanceRetryMax:         4,
-		MetadataRetryMax:               1,
-		MetadataRetryBackoff:           1000 * time.Millisecond,
-		MetadataRefreshFrequency:       600 * time.Second,
+		MaxWaitTime:            time.Second,
+		RequiredAcks:           sarama.WaitForAll,
+		ReturnSuccesses:        true,
+		Timeout:                time.Second, // Maximum request processing time on the server side
+		MaxMessageBytes:        131072,      // CDMQ set up
+		FlushMessages:          0,
+		FlushMaxMessages:       0,
+		FlushBytes:             0,
+		FlushFrequency:         0,
+		BatchConsumeCount:      0,
+		BatchFlush:             2 * time.Second,
+		ScramClient:            nil,
+		MaxRetry:               0, // Unlimited retries, compatible with historical situations
+		NetMaxOpenRequests:     5,
+		MaxProcessingTime:      100 * time.Millisecond,
+		NetDailTimeout:         30 * time.Second,
+		NetReadTimeout:         30 * time.Second,
+		NetWriteTimeout:        30 * time.Second,
+		GroupSessionTimeout:    10 * time.Second,
+		GroupRebalanceTimeout:  60 * time.Second,
+		GroupRebalanceRetryMax: 4,
+		MetadataRetryMax:       1,
+		MetadataRetryBackoff:   1000 * time.Millisecond,
+		// The default time for sarama is 10 minutes, which results in a slow detection of new partitions, so it is shortened to 2 minutes.
+		MetadataRefreshFrequency:       120 * time.Second,
 		MetadataFull:                   false, // disable pull all metadata
 		MetadataAllowAutoTopicCreation: true,
 		IsolationLevel:                 0,
