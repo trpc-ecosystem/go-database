@@ -24,6 +24,11 @@ func TestParseAddress(t *testing.T) {
 	assert.Equal(t, 54455, cfg.FetchMax)
 	assert.Equal(t, 35326236, cfg.MaxMessageBytes)
 	assert.Equal(t, sarama.OffsetOldest, cfg.Initial)
+	assert.Equal(t, 10, cfg.FlushMessages)
+	assert.Equal(t, 100, cfg.FlushMaxMessages)
+	assert.Equal(t, 10000000, cfg.FlushBytes)
+	assert.Equal(t, 100*time.Millisecond, cfg.FlushFrequency)
+	assert.Equal(t, true, cfg.Idempotent)
 
 	RegisterAddrConfig("test_registered", cfg)
 
@@ -36,8 +41,10 @@ func TestParseAddress(t *testing.T) {
 func Test_parseAddress(t *testing.T) {
 	address := "127.0.0.1:9092?topic=Topic1&clientid=client1&compression=none&partitioner=hash&user=kafka_test&password=cccaaabb&mechanism=SCRAM-SHA-512"
 	_, err := ParseAddress(address)
+	assert.Nil(t, err)
 	address = "127.0.0.1:9092?topic=Topic1&clientid=client1&compression=none&partitioner=hash&protocol=SASL_SSL&user=kafka_test&password=cccaaabb&mechanism=SCRAM-SHA-512"
 	_, err = ParseAddress(address)
+	assert.Nil(t, err)
 	address = "127.0.0.1:9092?topics=Topic1,Topic2,Topic3&clientid=client1&version=0.10.2.0&strategy=sticky&batch=2&batchFlush=3000&group=test&maxRetry=10"
 	_, err = ParseAddress(address)
 	assert.Nil(t, err)
@@ -72,7 +79,27 @@ func Test_parseAddressWithmaxWaitTime(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 250*time.Millisecond, conf.MaxWaitTime)
 	address = "127.0.0.1:9092?topic=Topic1&clientid=client1&compression=none&partitioner=hash&maxWaitTime=test"
-	conf, err = ParseAddress(address)
+	_, err = ParseAddress(address)
+	assert.NotNil(t, err)
+}
+
+func Test_parseAddressWithMetadata(t *testing.T) {
+	address := "127.0.0.1:9092?topic=Topic1&clientid=client1&compression=none&partitioner=hash&metadataRetryMax=3&metadataRetryBackoff=10&metadataRefreshFrequency=100&metadataFull=true&metadataAllowAutoTopicCreation=true"
+	conf, err := ParseAddress(address)
+	assert.Nil(t, err)
+	assert.Equal(t, 3, conf.MetadataRetryMax)
+	assert.Equal(t, 10*time.Millisecond, conf.MetadataRetryBackoff)
+	assert.Equal(t, 100*time.Second, conf.MetadataRefreshFrequency)
+	assert.Equal(t, true, conf.MetadataFull)
+	assert.Equal(t, true, conf.MetadataAllowAutoTopicCreation)
+	address = "127.0.0.1:9092?topic=Topic1&clientid=client1&compression=none&partitioner=hash&metadataRetryMax=-3&metadataRetryBackoff=10&metadataRefreshFrequency=100"
+	_, err = ParseAddress(address)
+	assert.NotNil(t, err)
+	address = "127.0.0.1:9092?topic=Topic1&clientid=client1&compression=none&partitioner=hash&metadataRetryMax=3&metadataRetryBackoff=-10&metadataRefreshFrequency=100"
+	_, err = ParseAddress(address)
+	assert.NotNil(t, err)
+	address = "127.0.0.1:9092?topic=Topic1&clientid=client1&compression=none&partitioner=hash&metadataRetryMax=3&metadataRetryBackoff=10&metadataRefreshFrequency=-100"
+	_, err = ParseAddress(address)
 	assert.NotNil(t, err)
 }
 

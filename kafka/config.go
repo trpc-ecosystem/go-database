@@ -45,18 +45,23 @@ type UserConfig struct {
 	ScramClient       *LSCRAMClient // LSCRAM safety certification
 	// The maximum number of retries on failure,
 	// the default is 0: retry all the time <0 means no retry
-	MaxRetry               int
-	NetMaxOpenRequests     int // Maximum number of requests
-	MaxProcessingTime      time.Duration
-	NetDailTimeout         time.Duration
-	NetReadTimeout         time.Duration
-	NetWriteTimeout        time.Duration
-	GroupSessionTimeout    time.Duration
-	GroupRebalanceTimeout  time.Duration
-	GroupRebalanceRetryMax int
-	IsolationLevel         sarama.IsolationLevel
-	RetryInterval          time.Duration // Retry Interval Works with MaxRetry
-	ProducerRetry          struct {
+	MaxRetry                       int
+	NetMaxOpenRequests             int // Maximum number of requests
+	MaxProcessingTime              time.Duration
+	NetDailTimeout                 time.Duration
+	NetReadTimeout                 time.Duration
+	NetWriteTimeout                time.Duration
+	GroupSessionTimeout            time.Duration
+	GroupRebalanceTimeout          time.Duration
+	GroupRebalanceRetryMax         int
+	MetadataRetryMax               int
+	MetadataRetryBackoff           time.Duration
+	MetadataRefreshFrequency       time.Duration
+	MetadataFull                   bool
+	MetadataAllowAutoTopicCreation bool
+	IsolationLevel                 sarama.IsolationLevel
+	RetryInterval                  time.Duration // Retry Interval Works with MaxRetry
+	ProducerRetry                  struct {
 		Max           int           // Maximum number of retries
 		RetryInterval time.Duration // RetryInterval retry interval
 	}
@@ -83,9 +88,11 @@ func (uc *UserConfig) getServerConfig() *sarama.Config {
 		sc.ClientID = uc.ClientID
 	}
 
-	sc.Metadata.Full = false                // Disable pulling all metadata
-	sc.Metadata.Retry.Max = 1               // Metadata Update Repeat Times
-	sc.Metadata.Retry.Backoff = time.Second // Metadata update wait time
+	sc.Metadata.Retry.Max = uc.MetadataRetryMax
+	sc.Metadata.Retry.Backoff = uc.MetadataRetryBackoff
+	sc.Metadata.RefreshFrequency = uc.MetadataRefreshFrequency
+	sc.Metadata.Full = uc.MetadataFull
+	sc.Metadata.AllowAutoTopicCreation = uc.MetadataAllowAutoTopicCreation
 
 	sc.Net.MaxOpenRequests = uc.NetMaxOpenRequests
 	sc.Net.DialTimeout = uc.NetDailTimeout
@@ -129,28 +136,33 @@ func GetDefaultConfig() *UserConfig {
 		// The maximum waiting time for a single consumption pull request.
 		// The maximum wait time will only wait if there is no recent data.
 		// This value should be set larger to reduce the consumption of empty requests on the QPS of the server.
-		MaxWaitTime:            time.Second,
-		RequiredAcks:           sarama.WaitForAll,
-		ReturnSuccesses:        true,
-		Timeout:                time.Second, // Maximum request processing time on the server side
-		MaxMessageBytes:        131072,      // CDMQ set up
-		FlushMessages:          0,
-		FlushMaxMessages:       0,
-		FlushBytes:             0,
-		FlushFrequency:         0,
-		BatchConsumeCount:      0,
-		BatchFlush:             2 * time.Second,
-		ScramClient:            nil,
-		MaxRetry:               0, // Unlimited retries, compatible with historical situations
-		NetMaxOpenRequests:     5,
-		MaxProcessingTime:      100 * time.Millisecond,
-		NetDailTimeout:         30 * time.Second,
-		NetReadTimeout:         30 * time.Second,
-		NetWriteTimeout:        30 * time.Second,
-		GroupSessionTimeout:    10 * time.Second,
-		GroupRebalanceTimeout:  60 * time.Second,
-		GroupRebalanceRetryMax: 4,
-		IsolationLevel:         0,
+		MaxWaitTime:                    time.Second,
+		RequiredAcks:                   sarama.WaitForAll,
+		ReturnSuccesses:                true,
+		Timeout:                        time.Second, // Maximum request processing time on the server side
+		MaxMessageBytes:                131072,      // CDMQ set up
+		FlushMessages:                  0,
+		FlushMaxMessages:               0,
+		FlushBytes:                     0,
+		FlushFrequency:                 0,
+		BatchConsumeCount:              0,
+		BatchFlush:                     2 * time.Second,
+		ScramClient:                    nil,
+		MaxRetry:                       0, // Unlimited retries, compatible with historical situations
+		NetMaxOpenRequests:             5,
+		MaxProcessingTime:              100 * time.Millisecond,
+		NetDailTimeout:                 30 * time.Second,
+		NetReadTimeout:                 30 * time.Second,
+		NetWriteTimeout:                30 * time.Second,
+		GroupSessionTimeout:            10 * time.Second,
+		GroupRebalanceTimeout:          60 * time.Second,
+		GroupRebalanceRetryMax:         4,
+		MetadataRetryMax:               1,
+		MetadataRetryBackoff:           1000 * time.Millisecond,
+		MetadataRefreshFrequency:       600 * time.Second,
+		MetadataFull:                   false, // disable pull all metadata
+		MetadataAllowAutoTopicCreation: true,
+		IsolationLevel:                 0,
 		// Message consumption error retry interval The default is 3s The unit of this parameter is time.Millisecond
 		RetryInterval: 3000 * time.Millisecond,
 		// production retries the default configuration to align with the default configuration of sarama.NewConfig
