@@ -7,8 +7,8 @@ package gorm
 import (
 	reflect "reflect"
 
-	gomock "github.com/golang/mock/gomock"
 	log "trpc.group/trpc-go/trpc-go/log"
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockLogger is a mock of Logger interface.

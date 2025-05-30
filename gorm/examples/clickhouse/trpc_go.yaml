@@ -1,0 +1,29 @@
+global:                             # Global configuration
+  namespace: Development            # Environment type: Production for formal, Development for non-formal
+  env_name: test                    # Environment name for non-formal environments
+
+client:                                            
+  service: 
+    - name: trpc.clickhouse.server.service
+      # Reference: https://github.com/ClickHouse/clickhouse-go?tab=readme-ov-file#dsn
+      target: dsn://clickhouse://my-username:my-secret-pw@127.0.0.1:9000/my_database?dial_timeout=200ms&max_execution_time=60
+
+plugins:                                           # Plugin configuration
+  log:                                             # Log configuration
+    default:                                       # Default log configuration, supports multiple outputs
+      - writer: console                            # Console standard output (default)
+        level: debug                               # Log level for standard output
+  
+  database:
+    gorm:
+      # Configuration effective for all gorm clients
+      max_idle: 20 # Maximum idle connections (default 10)
+      max_open: 100 # Maximum active connections (default 10000)
+      max_lifetime: 180000 # Maximum connection lifetime in milliseconds (default 3min)
+      driver_name: clickhouse # Driver used for connection, empty by default, import corresponding driver if needed
+      logger:
+        slow_threshold: 200 # Slow query threshold in milliseconds, 0 means no slow query logging (default 0)
+        colorful: false # Whether to print colorful logs (default false)
+        ignore_record_not_found_error: false # Whether to ignore record not found errors (default false)
+        log_level: 4 # Log level: 1:Silent, 2:Error, 3:Warn, 4:Info (default no logging)
+        max_sql_size: 100 # Maximum SQL statement length for truncation, 0 means no limit (default 0)

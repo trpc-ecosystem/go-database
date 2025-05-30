@@ -23,7 +23,66 @@ Currently, the most popular ORM framework in Go is Gorm, which has a high level 
 
 ## Quick Start
 
-Currently, it supports MySQL/ClickHouse and has made adjustments in the code to quickly iterate and support other types of databases.
+Add trpc_go.yaml framework configuration:
+
+```yaml
+client:                                            
+  service: 
+    - name: trpc.mysql.server.service
+      # Reference: https://github.com/go-sql-driver/mysql?tab=readme-ov-file#dsn-data-source-name
+      target: dsn://root:123456@tcp(127.0.0.1:3306)/mydb?charset=utf8mb4&parseTime=True
+```
+
+Code implementation:
+
+```go
+package main
+
+import (
+    "github.com/trpc-group/trpc-database/gorm"
+    "trpc.group/trpc-go/trpc-go"
+    "trpc.group/trpc-go/trpc-go/log"
+)
+
+type User struct {
+    ID       int
+    Username string
+}
+
+func main() {
+    _ = trpc.NewServer()
+
+    cli, err := gorm.NewClientProxy("trpc.mysql.server.service")
+    if err != nil {
+        panic(err)
+    }
+
+    // Create record
+    insertUser := User{Username: "gorm-client"}
+    result := cli.Create(&insertUser)
+    log.Infof("inserted data's primary key: %d, err: %v", insertUser.ID, result.Error)
+
+    // Query record
+    var queryUser User
+    if err := cli.First(&queryUser).Error; err != nil {
+        panic(err)
+    }
+    log.Infof("query user: %+v", queryUser)
+
+    // Delete record
+    deleteUser := User{ID: insertUser.ID}
+    if err := cli.Delete(&deleteUser).Error; err != nil {
+        panic(err)
+    }
+    log.Info("delete record succeed")
+
+    // For more use cases, see https://gorm.io/docs/create.html
+}
+```
+
+Complete example: [mysql-example](examples/mysql/main.go)
+
+## Complete Configuration
 
 ### tRPC-Go Framework Configuration
 
@@ -52,43 +111,109 @@ plugins: # Plugin configuration
   database:
     gorm:
       # Default connection pool configuration for all database connections
-      max_idle: 20 # Maximum number of idle connections
-      max_open: 100 # Maximum number of open connections
-      max_lifetime: 180000 # Maximum connection lifetime (in milliseconds)
+      max_idle: 20 # Maximum number of idle connections (default 10 if not set or set to 0); if negative, no idle connections are retained
+      max_open: 100 # Maximum number of open connections (default 10000 if not set or set to 0); if negative, no limit on open connections
+      max_lifetime: 180000 # Maximum connection lifetime in milliseconds (default 3min); if negative, connections are not closed due to age
+      driver_name: mysql # Driver used for the connection (empty by default, import the corresponding driver if specifying)
+      logger: # this feature is supported in versions >= v0.2.2
+        slow_threshold: 200 # Slow query threshold in milliseconds, 0 means no slow query logging (default 0)
+        colorful: false # Whether to colorize the logs (default false)
+        ignore_record_not_found_error: false # Whether to ignore errors when records are not found (default false)
+        log_level: 4 # Log level: 1:Silent, 2:Error, 3:Warn, 4:Info (default no logging)
+        max_sql_size: 100 # Maximum SQL statement length for truncation, 0 means no limit (default 0)
       # Individual connection pool configuration for specific database connections
       service:
-        - name: trpc.mysql.xxxx.xxxx
+        - name: trpc.mysql.server.service
           max_idle: 10 
           max_open: 50 
           max_lifetime: 180000 
-          driver_name: xxx # Driver used for the connection (empty by default, import the corresponding driver if specifying)
-
-```
-
-### gorm Logger Configuration (Optional)
-
-You can configure logging parameters using plugins. Here is an example of configuring logging parameters using YAML syntax:
-
-
-```yaml
-plugins: # Plugin configuration
-  database:
-    gorm:
-      # Default logging configuration for all database connections
-      logger:
-        slow_threshold: 1000 # Slow query threshold in milliseconds
-        colorful: true # Whether to colorize the logs
-        ignore_record_not_found_error: true # Whether to ignore errors when records are not found
-        log_level: 4 # 1: Silent, 2: Error, 3: Warn, 4: Info
-      # Individual logging configuration for specific database connections
-      service:
-        - name: trpc.mysql.xxxx.xxxx
+          driver_name: mysql # Driver used for the connection (empty by default, import the corresponding driver if specifying)
           logger:
             slow_threshold: 1000 
             colorful: true 
             ignore_record_not_found_error: true 
             log_level: 4 
+```
 
+## Advanced Features
+
+### Polaris Routing and Addressing
+
+If you need to use Polaris routing and addressing, first add:
+
+`import _ "github.com/trpc-group/trpc-naming-polaris"`
+
+Then use the `gorm+polaris` scheme in the framework configuration target, and write the Polaris service name in the original `host:port` position.
+
+```yaml
+client:                                            
+  service:                                         
+    - name: trpc.mysql.xxxx.xxxx
+      namespace: Production
+      # Use gorm+polaris scheme, write Polaris service name in original host:port position
+      target: gorm+polaris://root:123456@tcp(${polaris_name})/mydb?parseTime=True
+```
+
+### ClickHouse Integration
+
+Add trpc_go.yaml framework configuration:
+
+Note that service.name uses the four-segment format `trpc.${app}.${server}.${service}`, where `${app}` should be `clickhouse`.
+
+```yaml
+client:                                            
+  service: 
+    - name: trpc.clickhouse.server.service
+      # Reference: https://github.com/ClickHouse/clickhouse-go?tab=readme-ov-file#dsn
+      target: dsn://clickhouse://default:@127.0.0.1:9000/mydb?dial_timeout=200ms&max_execution_time=60
+      # In gorm/v0.2.2 and earlier, using this DSN format would prompt username or password errors, 
+      # you should use the pre-change DSN format:
+      # target: dsn://tcp://localhost:9000?username=user&password=qwerty&database=clicks&read_timeout=10&write_timeout=20
+```
+
+Complete example: [clickhouse-example](examples/clickhouse/main.go)
+
+### SQLite Integration
+
+Add trpc_go.yaml framework configuration:
+
+Note that service.name uses the four-segment format `trpc.${app}.${server}.${service}`, where `${app}` should be `sqlite`.
+
+```yaml
+client:                                            
+  service: 
+    - name: trpc.sqlite.server.service
+      # Reference: https://github.com/mattn/go-sqlite3?tab=readme-ov-file#dsn-examples
+      # Execute "sqlite3 mysqlite.db" in the current directory to create the database
+      target: dsn://file:mysqlite.db
+```
+
+Add plugin configuration, keep the service name consistent, and configure `driver_name: sqlite3`.
+
+```yaml
+plugins:
+  database:
+    gorm:
+      service:
+        # Configuration effective for trpc.sqlite.server.service client
+        - name: trpc.sqlite.server.service
+          driver_name: sqlite3 # Requires import "github.com/mattn/go-sqlite3"
+```
+
+Complete example: [sqlite-example](examples/sqlite/main.go)
+
+### PostgreSQL Integration
+
+Add trpc_go.yaml framework configuration.
+
+Note that service.name uses the four-segment format `trpc.${app}.${server}.${service}`, where `${app}` should be `postgres`.
+
+```yaml
+client:                                            
+  service: 
+    - name: trpc.postgres.server.service
+      # Reference: https://github.com/jackc/pgx?tab=readme-ov-file#example-usage
+      target: dsn://postgres://username:password@localhost:5432/database_name
 ```
 
 ###  Code Implementation
@@ -136,6 +261,7 @@ Example of logging:
 gormDB := gorm.NewClientProxy("trpc.mysql.test.test")
 gormDB.Debug().Where("current_owners = ?", "xxxx").Where("id < ?", xxxx).Find(&owners)
 ```
+
 ### Context
 When using the database plugin, you may need to report trace information and pass a context with the request. Gorm provides the WithContext method to include a context.
 
@@ -166,6 +292,9 @@ Example:
 gormDB.Debug().Where("current_owners = ?", "xxxx").Where("id < ?", xxxx).Find(&owners)
 ```
 
+### Implementation Details
+
+See the specific [implementation details](docs/architecture.md) of the gorm plugin.
 
 ## Implementation Approach
 
@@ -197,14 +326,39 @@ Thus, the Client becomes a custom connection that satisfies gorm's requirements,
 
 Additionally, there is a TxClient used for transaction handling, which implements both the ConnPool and TxCommitter interfaces defined by gorm.
 
+## Notes
+
+### Timeout Settings Not Effective
+
+If users add timeout in the framework configuration, the tRPC-Go framework will create a new context when making calls and cancel the context after the call ends. This feature will cause "Context Canceled" errors when reading data from the `Row` interface, so the current plugin will set timeout to zero.
+
+```yaml
+client:                                     
+  service:                                         
+    - name: trpc.mysql.xxxx.xxxx # initialized as mysql
+      timeout: 1000 # timeout configuration will not take effect
+```
+
+If you need to configure request timeout, you can use context.WithTimeout() to control the context yourself.
+If you want to configure connection establishment timeout, connection read/write timeout, you can consider configuring related parameters in the DSN, for example, for MySQL you can configure [`readTimeout`, `writeTimeout` and `timeout`](https://github.com/go-sql-driver/mysql?tab=readme-ov-file#connection-pool-and-timeouts) in the DSN.
+
+```yaml
+client:                                            
+  service: 
+    - name: trpc.mysql.server.service
+      # Add readTimeout to DSN parameters, reference: https://github.com/go-sql-driver/mysql?tab=readme-ov-file#dsn-data-source-name
+      target: dsn://root:123456@tcp(127.0.0.1:3306)/mydb?readTimeout=100ms
+```
 
 ## Related Links：
 
 * Custom Connection in GORM：https://gorm.io/zh_CN/docs/connecting_to_the_database.html
 
 ## FAQ
+
 ### How to print specific SQL statements and results?
-This plugin has implemented the TRPC Logger for GORM, as mentioned in the "Logging" section above. If you are using the default NewClientProxy, you can use the Debug() method before the request to output the SQL statements to the TRPC log with the Info level.
+This plugin has implemented the TRPC Logger for GORM. You only need to configure `plugin.database.gorm.logger` configuration (requires plugin version >= v0.2.2) to print specific SQL statements to tRPC-Go logs.
+Or you can add `Debug()` before the request to output to logs at Info level.
 
 Example:
 ```
@@ -222,14 +376,48 @@ gormDB.WithContext(ctx).Where("current_owners = ?", "xxxx").Where("id < ?", xxxx
 ### How to set the isolation level for transactions?
 When starting a transaction, you can provide sql.TxOptions in the Begin method to set the isolation level. Alternatively, you can set it manually after starting the transaction using tx.Exec.
 
+### Soft delete not working after switching from native gorm to tRPC gorm plugin
+
+This is because gorm changed the soft delete method after the major version upgrade from jinzhu/gorm to gorm.io/gorm.
+
+For the new soft delete method, see the documentation https://gorm.io/docs/delete.html#Soft-Delete
+
+Using gorm.DeleteAt can directly be compatible with jinzhu/gorm soft delete.
+
+### How to handle Context Canceled errors
+
+**Update to the latest version to resolve this issue. The latest version will force timeout to 0.**
+
+This problem is generally caused by setting a global timeout in the trpc framework client. A common trpc framework configuration example is as follows:
+
+```yaml
+client:
+  timeout: 1000 # Need to remove this
+  service:
+    - name: xxxxx
+      protocol: trpc
+      timeout: 1000 # Set timeout separately for other services
+```
+
+The client-level timeout is a global timeout. All trpc clients that don't have a separate timeout setting will use this setting. The old version of this plugin would report errors due to context being canceled as long as timeout was set.
+
 ### Currently, only MySQL, ClickHouse, and PostgreSQL are supported.
 
+Parse the `client.service.name` name, which needs to use the standard four-segment name format. For example, `trpc.mysql.xxx.xxx` initializes the `mysql driver`; `trpc.clickhouse.xxx.xxx` initializes the `clickhouse driver`; `trpc.postgres.xxx.xxx` initializes the `postgres driver(pgx)`.
+
+For non-standard four-segment names, it defaults to initializing the `mysql driver`.
+
 ### When using GORM transactions, only the Begin method goes through the tRPC call chain.
+
+**Update to the latest version to resolve this issue. v0.1.3 version has resolved this issue.**
+
 This is a design compromise made to reduce complexity. In this plugin, when calling BeginTx, it directly returns the result of sql.DB.BeginTx(), which is an already opened transaction. Subsequent transaction operations are handled by that transaction.
 
 Considering that this plugin is mainly designed for connecting to MySQL instances, this approach can reduce some complexity while ensuring normal operation. However, considering that there may be services that require all database requests to go through the tRPC filter, the mechanism will be modified in the future to make all requests within the transaction go through the tRPC request flow.
 
 If inaccurate reporting of data is caused by this behavior, you can disable the GORM transaction optimization to ensure that all requests that do not explicitly use transactions go through the basic reporting methods.
+
+> To ensure data consistency, GORM performs write operations (create, update, delete) within transactions. If you don't have this requirement, you can disable it during initialization.
 
 Example:
 ```go
@@ -245,5 +433,3 @@ gormDB, err := gorm.Open(
 	},
 )
 ```
-
-

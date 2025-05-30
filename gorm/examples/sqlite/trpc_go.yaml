@@ -1,0 +1,32 @@
+global:                             # Global configuration
+  namespace: Development            # Environment type: Production for formal, Development for non-formal
+  env_name: test                    # Environment name for non-formal environments
+
+client:                                            
+  service: 
+    - name: trpc.sqlite.server.service
+      # Reference: https://github.com/mattn/go-sqlite3?tab=readme-ov-file#dsn-examples
+      # Execute "sqlite3 mysqlite.db" in the current directory to create the database
+      target: dsn://file:mysqlite.db
+
+plugins:                                           # Plugin configuration
+  log:                                             # Log configuration
+    default:                                       # Default log configuration, supports multiple outputs
+      - writer: console                            # Console standard output (default)
+        level: debug                               # Log level for standard output
+  
+  database:
+    gorm:
+      logger:
+        slow_threshold: 200 # Slow query threshold in milliseconds, 0 means no slow query logging (default 0)
+        colorful: false # Whether to print colorful logs (default false)
+        ignore_record_not_found_error: false # Whether to ignore record not found errors (default false)
+        log_level: 4 # Log level: 1:Silent, 2:Error, 3:Warn, 4:Info (default no logging)
+        max_sql_size: 100 # Maximum SQL statement length for truncation, 0 means no limit (default 0)
+      service:
+        # Configuration effective for trpc.sqlite.server.service client
+        - name: trpc.sqlite.server.service
+          max_idle: 10 # Maximum idle connections (default 10)
+          max_open: 50 # Maximum active connections (default 10000)
+          max_lifetime: 180000 # Maximum connection lifetime in milliseconds (default 3min)
+          driver_name: sqlite3 # Driver used for connection, empty by default, import corresponding driver if needed

@@ -116,6 +116,7 @@ func TestUnit_Log_Trace_P0(t *testing.T) {
 	Convey("TestUnit_Log_Trace_P0", t, func() {
 		silentLog := NewTRPCLogger(logger.Config{LogLevel: logger.Silent})
 		infoLog := NewTRPCLogger(logger.Config{LogLevel: logger.Info})
+		infoLog.SetMaxSqlLength(2)
 		calledTimes := 0
 
 		mockCtrl := gomock.NewController(t)
@@ -131,7 +132,7 @@ func TestUnit_Log_Trace_P0(t *testing.T) {
 				So(format, ShouldEqual, infoLog.traceStr)
 				if calledTimes == 0 {
 					So(args[2], ShouldEqual, 7)
-					So(args[3], ShouldEqual, "this is sql")
+					So(args[3], ShouldEqual, "t ...")
 				} else {
 					So(args[2], ShouldEqual, "-")
 					So(args[3], ShouldEqual, "")

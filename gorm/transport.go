@@ -3,6 +3,7 @@ package gorm
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"strings"
 	"sync"
@@ -10,16 +11,19 @@ import (
 
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/go-sql-driver/mysql"
+	"golang.org/x/sync/singleflight"
+	dsn "trpc.group/trpc-go/trpc-selector-dsn"
+
 	"trpc.group/trpc-go/trpc-go/codec"
 	"trpc.group/trpc-go/trpc-go/errs"
 	"trpc.group/trpc-go/trpc-go/naming/selector"
 	"trpc.group/trpc-go/trpc-go/transport"
-	trpcdsn "trpc.group/trpc-go/trpc-selector-dsn"
 )
 
 func init() {
 	transport.RegisterClientTransport("gorm", defaultClientTransport)
-	selector.Register("gorm+polaris", trpcdsn.NewResolvableSelector("polaris", &trpcdsn.URIHostExtractor{}))
+	selector.Register("gorm+polaris", dsn.NewResolvableSelectorWithOpts("polaris",
+		dsn.WithEnableParseAddr(true), dsn.WithExtractor(&dsn.URIHostExtractor{})))
 }
 
 // PoolConfig is the configuration of the database connection pool.
@@ -37,6 +41,7 @@ type ClientTransport struct {
 	opts              *transport.ClientTransportOptions
 	SQLDB             map[string]*sql.DB
 	SQLDBLock         sync.RWMutex
+	sfg               singleflight.Group
 	DefaultPoolConfig PoolConfig
 	PoolConfigs       map[string]PoolConfig
 }
@@ -57,9 +62,9 @@ func NewClientTransport(opt ...transport.ClientTransportOption) *ClientTransport
 		opts:   opts,
 		SQLDB:  make(map[string]*sql.DB),
 		DefaultPoolConfig: PoolConfig{
-			MaxIdle:     10,
-			MaxOpen:     10000,
-			MaxLifetime: 3 * time.Minute,
+			MaxIdle:     defaultMaxIdle,
+			MaxOpen:     defaultMaxOpen,
+			MaxLifetime: defaultMaxLifetime,
 		},
 	}
 }
@@ -103,22 +108,49 @@ func (ct *ClientTransport) RoundTrip(ctx context.Context, reqBuf []byte,
 	for _, o := range callOpts {
 		o(sqlOpts)
 	}
+	withCommonMetaCalleeAppServer(msg, ct.getDBType(msg.CalleeServiceName()), mask(sqlOpts.Address))
 
+	err = ct.getDBAndRunCommand(ctx, sqlOpts.Address, req, rsp)
+	if err == nil {
+		return
+	}
+
+	// DB might be closed by gorm.io/gorm. If the failure is due to the closure of DB, recreate DB and retry.
+	// internal repository issues/525
+	if isDBClosedErr(err) {
+		ct.deleteDB(sqlOpts.Address)
+		err = ct.getDBAndRunCommand(ctx, sqlOpts.Address, req, rsp)
+	}
+	return
+}
+
+func (ct *ClientTransport) getDBAndRunCommand(ctx context.Context, address string, req *Request, rsp *Response) error {
 	// If a new type of database is added, the database type needs to be passed in here.
 	// The CalleeServcieName can be read from sqlOpts.Msg,
 	// which is the service name in the trpc framework configuration.
 	// The database type can be obtained based on the second segment of the service name.
-	db, err := ct.GetDB(msg.CalleeServiceName(), sqlOpts.Address)
+	msg := codec.Message(ctx)
+	db, err := ct.GetDB(msg.CalleeServiceName(), address)
 	if err != nil {
-		err = fmt.Errorf(
-			`err: %w, 
-current masked sqlOpts.Address: %s,
-if it is not what you want, it is possible that your client config is not loaded correctly`,
-			err, mask(sqlOpts.Address)) // Mask out the credentials.
-		return
+		return wrapGetDbError(err, address)
 	}
-	err = runCommand(ctx, db, req, rsp)
-	return
+	return runCommand(ctx, db, req, rsp)
+}
+
+// withCommonMetaCalleeAppServer Populate the called app and the called server with real DB instances
+// in CommonMeta for fault location.
+func withCommonMetaCalleeAppServer(msg codec.Msg, calleeApp, calleeServer string) {
+	meta := msg.CommonMeta()
+	if meta == nil {
+		meta = codec.CommonMeta{}
+	}
+	const (
+		appKey    = "overrideCalleeApp"
+		serverKey = "overrideCalleeServer"
+	)
+	meta[appKey] = calleeApp
+	meta[serverKey] = calleeServer
+	msg.WithCommonMeta(meta)
 }
 
 // mask masks the given string with '*' characters in the middle to prevent security vulnerabilities.
@@ -199,6 +231,9 @@ func runCommand(ctx context.Context, db *sql.DB, req *Request, rsp *Response) er
 		// The definition of sql.Row contains an error, so this operation does not handle err,
 		// but passes it to the upstream in the result.
 		row := db.QueryRowContext(ctx, req.Query, req.Args...)
+		if row != nil && isDBClosedErr(row.Err()) {
+			return row.Err()
+		}
 		rsp.Row = row
 	case OpBeginTx:
 		// Default level is sql.LevelDefault.
@@ -218,6 +253,8 @@ func runCommand(ctx context.Context, db *sql.DB, req *Request, rsp *Response) er
 	return nil
 }
 
+var errDBAreadyExist = errors.New("the db is already exist")
+
 // GetDB retrieves the database connection, currently supports mysql/clickhouse,
 // can be extended for other types of databases.
 func (ct *ClientTransport) GetDB(serviceName, dsn string) (*sql.DB, error) {
@@ -228,35 +265,52 @@ func (ct *ClientTransport) GetDB(serviceName, dsn string) (*sql.DB, error) {
 	if ok {
 		return db, nil
 	}
-	ct.SQLDBLock.Lock()
-	defer ct.SQLDBLock.Unlock()
 
-	db, ok = ct.SQLDB[dsn]
-	if ok {
-		return db, nil
-	}
-	// Pass the database type as part of the serviceName, such as trpc.mysql.xxx.xxx/trpc.clickhouse.xxx.xxx,
-	// and use different drivers internally based on different types.
-	db, err := ct.initDB(serviceName, dsn)
-	if err != nil {
-		return nil, wrapperSQLOpenError(err)
-	}
-	poolConfig, ok := ct.PoolConfigs[serviceName]
-	if !ok {
-		poolConfig = ct.DefaultPoolConfig
-	}
-	if poolConfig.MaxIdle > 0 {
+	iDB, err, _ := ct.sfg.Do(dsn, func() (interface{}, error) {
+		ct.SQLDBLock.RLock()
+		db, ok = ct.SQLDB[dsn]
+		ct.SQLDBLock.RUnlock()
+		if ok {
+			return db, nil
+		}
+		// Pass the database type as part of the serviceName, such as trpc.mysql.xxx.xxx/trpc.clickhouse.xxx.xxx,
+		// and use different drivers internally based on different types.
+		db, err := ct.initDB(serviceName, dsn)
+		if err != nil {
+			return nil, wrapperSQLOpenError(err)
+		}
+		poolConfig, ok := ct.PoolConfigs[serviceName]
+		if !ok {
+			poolConfig = ct.DefaultPoolConfig
+		}
 		db.SetMaxIdleConns(poolConfig.MaxIdle)
-	}
-	if poolConfig.MaxOpen > 0 {
 		db.SetMaxOpenConns(poolConfig.MaxOpen)
-	}
-	if poolConfig.MaxLifetime > 0 {
 		db.SetConnMaxLifetime(poolConfig.MaxLifetime)
+		ct.SQLDBLock.Lock()
+		ct.SQLDB[dsn] = db
+		ct.SQLDBLock.Unlock()
+		return db, nil
+	})
+	if err == nil || errors.Is(err, errDBAreadyExist) {
+		return iDB.(*sql.DB), nil
 	}
+	return nil, err
+}
 
-	ct.SQLDB[dsn] = db
-	return db, nil
+func (ct *ClientTransport) deleteDB(dsn string) {
+	ct.SQLDBLock.Lock()
+	delete(ct.SQLDB, dsn)
+	ct.SQLDBLock.Unlock()
+}
+
+func (ct *ClientTransport) getDBType(s string) string {
+	splitServiceName := strings.Split(s, ".")
+	// Compatibility logic, keeps MySQL as the default.
+	// internal repository issues/235
+	if len(splitServiceName) < 2 {
+		return "mysql"
+	}
+	return splitServiceName[1]
 }
 
 func (ct *ClientTransport) initDB(s, dsn string) (*sql.DB, error) {
@@ -267,13 +321,10 @@ func (ct *ClientTransport) initDB(s, dsn string) (*sql.DB, error) {
 	if conf, ok := ct.PoolConfigs[s]; ok && conf.DriverName != "" {
 		return ct.opener(conf.DriverName, dsn)
 	}
-	splitServiceName := strings.Split(s, ".")
-	if len(splitServiceName) < 2 {
-		return ct.opener("mysql", dsn)
+	if ct.DefaultPoolConfig.DriverName != "" {
+		return ct.opener(ct.DefaultPoolConfig.DriverName, dsn)
 	}
-	// Compatibility logic, keeps MySQL as the default.
-	dbEngineType := splitServiceName[1]
-	switch dbEngineType {
+	switch ct.getDBType(s) {
 	case "clickhouse":
 		return ct.opener("clickhouse", dsn)
 	case "postgres":
@@ -291,4 +342,16 @@ func wrapperSQLOpenError(err error) error {
 			"please refer: https://pkg.go.dev/database/sql#Register", errStr)
 	}
 	return err
+}
+
+func wrapGetDbError(err error, address string) error {
+	return fmt.Errorf(
+		`err: %w, 
+current masked sqlOpts.Address: %s,
+if it is not what you want, it is possible that your client config is not loaded correctly`,
+		err, mask(address)) // Mask out the credentials.
+}
+
+func isDBClosedErr(err error) bool {
+	return err != nil && err.Error() == "sql: database is closed"
 }
