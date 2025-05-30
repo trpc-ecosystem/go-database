@@ -14,7 +14,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-
 	"trpc.group/trpc-go/trpc-go"
 	"trpc.group/trpc-go/trpc-go/client"
 	"trpc.group/trpc-go/trpc-go/codec"
@@ -55,6 +54,11 @@ func (op OpEnum) String() string {
 
 // ConnPool implements the gorm.ConnPool interface as well as transaction and Ping functionality.
 type ConnPool interface {
+	Prepare(query string) (*sql.Stmt, error)
+	Exec(query string, args ...interface{}) (sql.Result, error)
+	Query(query string, args ...interface{}) (*sql.Rows, error)
+	QueryRow(query string, args ...interface{}) *sql.Row
+
 	PrepareContext(ctx context.Context, query string) (*sql.Stmt, error)
 	ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
 	QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error)
@@ -73,8 +77,8 @@ type Request struct {
 	Op        OpEnum
 	Query     string
 	Args      []interface{}
-	Tx        *sql.Tx
-	TxOptions *sql.TxOptions
+	Tx        *sql.Tx        `json:"-"`
+	TxOptions *sql.TxOptions `json:"-"`
 }
 
 // Response is the result returned by the tRPC framework.
@@ -83,8 +87,8 @@ type Response struct {
 	Stmt   *sql.Stmt
 	Row    *sql.Row
 	Rows   *sql.Rows
-	Tx     *sql.Tx
-	DB     *sql.DB
+	Tx     *sql.Tx `json:"-"`
+	DB     *sql.DB `json:"-"`
 }
 
 // Client encapsulates the tRPC client and implements the ConnPoolBeginner interface.
@@ -170,6 +174,7 @@ var NewClientProxy = func(name string, opts ...client.Option) (*gorm.DB, error) 
 	}
 	// Support for other DBs.
 	// Compatibility logic, defaulting to MySQL.
+	// internal repository issues/235
 	dbEngineType := splitServiceName[1]
 	// Support postgresql.
 	switch dbEngineType {
@@ -233,6 +238,10 @@ func handleReqArgs(mreq *Request) error {
 	// so here the value needs to be passed.
 	for k, arg := range mreq.Args {
 		if valuer, ok := arg.(driver.Valuer); ok {
+			// cannot call Value on nil Valuer
+			if reflect.ValueOf(valuer).Kind() == reflect.Ptr && reflect.ValueOf(valuer).IsNil() {
+				continue
+			}
 			v, err := valuer.Value()
 			if err != nil {
 				return err
@@ -251,6 +260,11 @@ func (gc *Client) PrepareContext(ctx context.Context, query string) (*sql.Stmt, 
 	return prepareContext(gc, ctx, query)
 }
 
+// Prepare implements the ConnPool.Prepare method.
+func (gc *Client) Prepare(query string) (*sql.Stmt, error) {
+	return prepareContext(gc, context.Background(), query)
+}
+
 func prepareContext(cp gorm.ConnPool, ctx context.Context, query string) (*sql.Stmt, error) {
 	mreq := &Request{
 		Op:    OpPrepareContext,
@@ -267,6 +281,11 @@ func prepareContext(cp gorm.ConnPool, ctx context.Context, query string) (*sql.S
 // ExecContext implements the ConnPool.ExecContext method.
 func (gc *Client) ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
 	return execContext(gc, ctx, query, args...)
+}
+
+// Exec implements the ConnPool.Exec method.
+func (gc *Client) Exec(query string, args ...interface{}) (sql.Result, error) {
+	return execContext(gc, context.Background(), query, args...)
 }
 
 func execContext(cp gorm.ConnPool, ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
@@ -288,6 +307,11 @@ func (gc *Client) QueryContext(ctx context.Context, query string, args ...interf
 	return queryContext(gc, ctx, query, args...)
 }
 
+// Query implements the ConnPool.Query method.
+func (gc *Client) Query(query string, args ...interface{}) (*sql.Rows, error) {
+	return queryContext(gc, context.Background(), query, args...)
+}
+
 func queryContext(cp gorm.ConnPool, ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
 	mreq := &Request{
 		Op:    OpQueryContext,
@@ -307,6 +331,11 @@ func (gc *Client) QueryRowContext(ctx context.Context, query string, args ...int
 	return queryRowContext(gc, ctx, query, args...)
 }
 
+// QueryRow Context implements the ConnPool.QueryRow method.
+func (gc *Client) QueryRow(query string, args ...interface{}) *sql.Row {
+	return queryRowContext(gc, context.Background(), query, args...)
+}
+
 func queryRowContext(cp gorm.ConnPool, ctx context.Context, query string, args ...interface{}) *sql.Row {
 	mreq := &Request{
 		Op:    OpQueryRowContext,
@@ -317,6 +346,7 @@ func queryRowContext(cp gorm.ConnPool, ctx context.Context, query string, args .
 	if err := handleReq(ctx, cp, mreq, mrsp); err != nil {
 		// An error occurred during execution,
 		// and sql.Row.err needs to be assigned a value to avoid panic during chain calls to QueryRowContent().Scan().
+		// internal repository issues/182
 		row := &sql.Row{}
 		v := reflect.ValueOf(row)
 		errField := v.Elem().FieldByName("err")

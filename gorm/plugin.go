@@ -37,6 +37,7 @@ type loggerConfig struct {
 	Colorful                  bool            `yaml:"colorful"`
 	IgnoreRecordNotFoundError bool            `yaml:"ignore_record_not_found_error"`
 	LogLevel                  logger.LogLevel `yaml:"log_level"`
+	MaxSqlSize                int             `yaml:"max_sql_size"`
 }
 
 // Config is the struct for the configuration of the SQL proxy.
@@ -44,6 +45,7 @@ type Config struct {
 	MaxIdle     int           `yaml:"max_idle"`     // Maximum number of idle connections.
 	MaxOpen     int           `yaml:"max_open"`     // Maximum number of connections that can be open at same time.
 	MaxLifetime int           `yaml:"max_lifetime"` // The maximum lifetime of each connection, in milliseconds.
+	DriverName  string        `yaml:"driver_name"`  // Driver name for customization.
 	Logger      *loggerConfig `yaml:"logger"`       // Logger configuration.
 	Service     []struct {
 		// In the case of having multiple database connections,
@@ -76,8 +78,6 @@ func (m *Plugin) Setup(name string, configDesc plugin.Decoder) (err error) {
 	if err = configDesc.Decode(&config); err != nil {
 		return
 	}
-
-	poolConfigs := make(map[string]PoolConfig, len(config.Service))
 	if config.Logger != nil {
 		loggers["*"] = NewTRPCLogger(logger.Config{
 			SlowThreshold:             time.Duration(config.Logger.SlowThreshold) * time.Millisecond,
@@ -85,14 +85,38 @@ func (m *Plugin) Setup(name string, configDesc plugin.Decoder) (err error) {
 			IgnoreRecordNotFoundError: config.Logger.IgnoreRecordNotFoundError,
 			LogLevel:                  config.Logger.LogLevel,
 		})
+		loggers["*"].maxSqlSize = config.Logger.MaxSqlSize
 	}
+	// Set pool configurations that effective for all GORM clients.
+	defaultClientTransport.DefaultPoolConfig = PoolConfig{
+		MaxIdle:     config.MaxIdle,
+		MaxOpen:     config.MaxOpen,
+		MaxLifetime: time.Duration(config.MaxLifetime) * time.Millisecond,
+		DriverName:  config.DriverName,
+	}
+	setDefaultValueOfGlobalPoolConfig(&defaultClientTransport.DefaultPoolConfig)
+	// Set pool configurations that effective for each GORM client.
+	poolConfigs := make(map[string]PoolConfig, len(config.Service))
 	for _, s := range config.Service {
-		poolConfigs[s.Name] = PoolConfig{
-			MaxIdle:     s.MaxIdle,
-			MaxOpen:     s.MaxOpen,
-			MaxLifetime: time.Duration(s.MaxLifetime) * time.Millisecond,
-			DriverName:  s.DriverName,
+		servicePoolConfig := PoolConfig{
+			MaxIdle:     defaultClientTransport.DefaultPoolConfig.MaxIdle,
+			MaxOpen:     defaultClientTransport.DefaultPoolConfig.MaxOpen,
+			MaxLifetime: defaultClientTransport.DefaultPoolConfig.MaxLifetime,
+			DriverName:  defaultClientTransport.DefaultPoolConfig.DriverName,
 		}
+		if s.MaxIdle != 0 {
+			servicePoolConfig.MaxIdle = s.MaxIdle
+		}
+		if s.MaxOpen != 0 {
+			servicePoolConfig.MaxOpen = s.MaxOpen
+		}
+		if s.MaxLifetime != 0 {
+			servicePoolConfig.MaxLifetime = time.Duration(s.MaxLifetime) * time.Millisecond
+		}
+		if s.DriverName != "" {
+			servicePoolConfig.DriverName = s.DriverName
+		}
+		poolConfigs[s.Name] = servicePoolConfig
 		if s.Logger != nil {
 			loggers[s.Name] = NewTRPCLogger(logger.Config{
 				SlowThreshold:             time.Duration(s.Logger.SlowThreshold) * time.Millisecond,
@@ -100,16 +124,29 @@ func (m *Plugin) Setup(name string, configDesc plugin.Decoder) (err error) {
 				IgnoreRecordNotFoundError: s.Logger.IgnoreRecordNotFoundError,
 				LogLevel:                  s.Logger.LogLevel,
 			})
+			loggers[s.Name].maxSqlSize = s.Logger.MaxSqlSize
 		}
 	}
 	defaultClientTransport.PoolConfigs = poolConfigs
-
-	defaultClientTransport.DefaultPoolConfig = PoolConfig{
-		MaxIdle:     config.MaxIdle,
-		MaxOpen:     config.MaxOpen,
-		MaxLifetime: time.Duration(config.MaxLifetime) * time.Millisecond,
-	}
 	// Need to call the register function explicitly, otherwise the configuration will not take effect.
 	transport.RegisterClientTransport("gorm", defaultClientTransport)
 	return nil
+}
+
+const (
+	defaultMaxIdle     = 10
+	defaultMaxOpen     = 10000
+	defaultMaxLifetime = 3 * time.Minute
+)
+
+func setDefaultValueOfGlobalPoolConfig(pc *PoolConfig) {
+	if pc.MaxIdle == 0 {
+		pc.MaxIdle = defaultMaxIdle
+	}
+	if pc.MaxOpen == 0 {
+		pc.MaxOpen = defaultMaxOpen
+	}
+	if pc.MaxLifetime == time.Duration(0) {
+		pc.MaxLifetime = defaultMaxLifetime
+	}
 }

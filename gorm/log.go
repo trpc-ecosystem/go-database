@@ -31,6 +31,7 @@ const (
 
 // TRPCLogger implements the Gorm logger.Interface.
 type TRPCLogger struct {
+	maxSqlSize                          int
 	config                              logger.Config
 	infoStr, warnStr, errStr            string
 	traceStr, traceErrStr, traceWarnStr string
@@ -70,6 +71,12 @@ func NewTRPCLogger(config logger.Config) *TRPCLogger {
 	}
 }
 
+// SetMaxSqlLength set the max length of log sql size and returns TRPCLogger.
+func (p *TRPCLogger) SetMaxSqlLength(length int) logger.Interface {
+	p.maxSqlSize = length
+	return p
+}
+
 // LogMode changes the log level and returns a new TRPCLogger.
 func (p *TRPCLogger) LogMode(level logger.LogLevel) logger.Interface {
 	newLogger := *p
@@ -84,14 +91,14 @@ func (p *TRPCLogger) Info(ctx context.Context, format string, args ...interface{
 	}
 }
 
-// Warn prints logs at the Warn level.
+// Warn logs warning level log.
 func (p *TRPCLogger) Warn(ctx context.Context, format string, args ...interface{}) {
 	if p.config.LogLevel >= logger.Warn {
 		log.WarnContextf(ctx, p.warnStr+format, append([]interface{}{utils.FileWithLineNum()}, args...)...)
 	}
 }
 
-// Error prints logs at the Error level.
+// Error logs Error level log.
 func (p *TRPCLogger) Error(ctx context.Context, format string, args ...interface{}) {
 	if p.config.LogLevel >= logger.Error {
 		log.ErrorContextf(ctx, p.errStr+format, append([]interface{}{utils.FileWithLineNum()}, args...)...)
@@ -109,7 +116,8 @@ func (p *TRPCLogger) Trace(ctx context.Context, begin time.Time, fc func() (stri
 	switch {
 	case err != nil && p.config.LogLevel >= logger.Error &&
 		(!errors.Is(err, gorm.ErrRecordNotFound) || !p.config.IgnoreRecordNotFoundError):
-		sql, rows := fc()
+		rawSql, rows := fc()
+		sql := p.truncateSQL(rawSql)
 		if rows == -1 {
 			log.ErrorContextf(ctx, p.traceErrStr,
 				utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, "-", sql)
@@ -118,7 +126,8 @@ func (p *TRPCLogger) Trace(ctx context.Context, begin time.Time, fc func() (stri
 				utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, rows, sql)
 		}
 	case elapsed > p.config.SlowThreshold && p.config.SlowThreshold != 0 && p.config.LogLevel >= logger.Warn:
-		sql, rows := fc()
+		rawSql, rows := fc()
+		sql := p.truncateSQL(rawSql)
 		slowLog := fmt.Sprintf("SLOW SQL >= %v", p.config.SlowThreshold)
 		if rows == -1 {
 			log.WarnContextf(ctx, p.traceWarnStr,
@@ -128,11 +137,19 @@ func (p *TRPCLogger) Trace(ctx context.Context, begin time.Time, fc func() (stri
 				utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
 		}
 	case p.config.LogLevel == logger.Info:
-		sql, rows := fc()
+		rawSql, rows := fc()
+		sql := p.truncateSQL(rawSql)
 		if rows == -1 {
 			log.InfoContextf(ctx, p.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, "-", sql)
 		} else {
 			log.InfoContextf(ctx, p.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
 		}
 	}
+}
+
+func (p *TRPCLogger) truncateSQL(sql string) string {
+	if p.maxSqlSize > 0 && len(sql) > p.maxSqlSize {
+		return sql[:p.maxSqlSize-1] + " ..."
+	}
+	return sql
 }

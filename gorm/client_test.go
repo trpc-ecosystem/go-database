@@ -9,17 +9,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/golang/mock/gomock"
+	. "github.com/smartystreets/goconvey/convey"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-
 	"trpc.group/trpc-go/trpc-go/client"
 	"trpc.group/trpc-go/trpc-go/client/mockclient"
 	"trpc.group/trpc-go/trpc-go/codec"
 	"trpc.group/trpc-go/trpc-go/transport"
-
-	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/golang/mock/gomock"
-	. "github.com/smartystreets/goconvey/convey"
 )
 
 const (
@@ -37,12 +35,6 @@ func TestUnit_NewConnPool_P0(t *testing.T) {
 	})
 }
 
-func setMockError(mockClient *mockclient.MockClient) {
-	mockClient.EXPECT().
-		Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
-		Return(fmt.Errorf("fake error"))
-}
-
 func TestUnit_gormCli_PrepareContext_P0(t *testing.T) {
 	Convey("TestUnit_gormCli_PrepareContext_P0", t, func() {
 		mockCtrl := gomock.NewController(t)
@@ -53,7 +45,9 @@ func TestUnit_gormCli_PrepareContext_P0(t *testing.T) {
 		gormClient.(*Client).Client = mockClient
 
 		Convey("Invoke error", func() {
-			setMockError(mockClient)
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(fmt.Errorf("fake error"))
 
 			_, err := gormClient.PrepareContext(context.Background(), "select * from table limit 1")
 			So(err, ShouldNotBeNil)
@@ -72,6 +66,43 @@ func TestUnit_gormCli_PrepareContext_P0(t *testing.T) {
 				})
 
 			result, err := gormClient.PrepareContext(context.Background(), "select * from table limit 1")
+			So(err, ShouldBeNil)
+			So(result, ShouldEqual, mockSQLStmt)
+		})
+	})
+}
+
+func TestUnit_gormCli_Prepare_P0(t *testing.T) {
+	Convey("TestUnit_gormCli_Prepare_P0", t, func() {
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+		mockClient := mockclient.NewMockClient(mockCtrl)
+
+		gormClient := NewConnPool(SQLName)
+		gormClient.(*Client).Client = mockClient
+
+		Convey("Invoke error", func() {
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(fmt.Errorf("fake error"))
+
+			_, err := gormClient.Prepare("select * from table limit 1")
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "fake error")
+		})
+		Convey("Invoke success", func() {
+			var mockSQLStmt = &sql.Stmt{}
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Do(func(ctx context.Context, reqbody interface{}, rspbody interface{}, opt ...client.Option) error {
+					msg := codec.Message(ctx)
+					rsp, ok := msg.ClientRspHead().(*Response)
+					So(ok, ShouldBeTrue)
+					rsp.Stmt = mockSQLStmt
+					return nil
+				})
+
+			result, err := gormClient.Prepare("select * from table limit 1")
 			So(err, ShouldBeNil)
 			So(result, ShouldEqual, mockSQLStmt)
 		})
@@ -114,6 +145,42 @@ func TestUnit_gormCli_ExecContext_P0(t *testing.T) {
 	})
 }
 
+func TestUnit_gormCli_Exec_P0(t *testing.T) {
+	Convey("TestUnit_gormCli_Exec_P0", t, func() {
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+		mockClient := mockclient.NewMockClient(mockCtrl)
+
+		gormClient := NewConnPool(SQLName)
+		gormClient.(*Client).Client = mockClient
+
+		Convey("Invoke error", func() {
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(fmt.Errorf("fake error"))
+
+			_, err := gormClient.Exec("select * from table limit 1")
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "fake error")
+		})
+		Convey("Invoke success", func() {
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Do(func(ctx context.Context, reqbody interface{}, rspbody interface{}, opt ...client.Option) error {
+					msg := codec.Message(ctx)
+					rsp, ok := msg.ClientRspHead().(*Response)
+					So(ok, ShouldBeTrue)
+					rsp.Result = driver.RowsAffected(1)
+					return nil
+				})
+
+			result, err := gormClient.Exec("select * from table limit 1")
+			So(err, ShouldBeNil)
+			So(result, ShouldResemble, driver.RowsAffected(1))
+		})
+	})
+}
+
 func TestUnit_gormCli_QueryContext_P0(t *testing.T) {
 	Convey("TestUnit_gormCli_ExecContext_P0", t, func() {
 		mockCtrl := gomock.NewController(t)
@@ -124,7 +191,9 @@ func TestUnit_gormCli_QueryContext_P0(t *testing.T) {
 		gormClient.(*Client).Client = mockClient
 
 		Convey("Invoke error", func() {
-			setMockError(mockClient)
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(fmt.Errorf("fake error"))
 
 			_, err := gormClient.QueryContext(context.Background(), "select * from table limit 1")
 			So(err, ShouldNotBeNil)
@@ -149,6 +218,43 @@ func TestUnit_gormCli_QueryContext_P0(t *testing.T) {
 	})
 }
 
+func TestUnit_gormCli_Query_P0(t *testing.T) {
+	Convey("TestUnit_gormCli_ExecContext_P0", t, func() {
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+		mockClient := mockclient.NewMockClient(mockCtrl)
+
+		gormClient := NewConnPool(SQLName)
+		gormClient.(*Client).Client = mockClient
+
+		Convey("Invoke error", func() {
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(fmt.Errorf("fake error"))
+
+			_, err := gormClient.Query("select * from table limit 1")
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "fake error")
+		})
+		Convey("Invoke success", func() {
+			var mockSQLRows = &sql.Rows{}
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Do(func(ctx context.Context, reqbody interface{}, rspbody interface{}, opt ...client.Option) error {
+					msg := codec.Message(ctx)
+					rsp, ok := msg.ClientRspHead().(*Response)
+					So(ok, ShouldBeTrue)
+					rsp.Rows = mockSQLRows
+					return nil
+				})
+
+			result, err := gormClient.Query("select * from table limit 1")
+			So(err, ShouldBeNil)
+			So(result, ShouldEqual, mockSQLRows)
+		})
+	})
+}
+
 func TestUnit_gormCli_BeginTx_P0(t *testing.T) {
 	Convey("TestUnit_gormCli_BeginTx_P0", t, func() {
 		mockCtrl := gomock.NewController(t)
@@ -159,7 +265,9 @@ func TestUnit_gormCli_BeginTx_P0(t *testing.T) {
 		gormClient.(*Client).Client = mockClient
 
 		Convey("Invoke error", func() {
-			setMockError(mockClient)
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(fmt.Errorf("fake error"))
 
 			_, err := gormClient.BeginTx(context.Background(), &sql.TxOptions{})
 			So(err, ShouldNotBeNil)
@@ -196,7 +304,9 @@ func TestUnit_gormCli_GetDB_P0(t *testing.T) {
 		gormClient.(*Client).Client = mockClient
 
 		Convey("Invoke error", func() {
-			setMockError(mockClient)
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(fmt.Errorf("fake error"))
 
 			_, err := gormClient.GetDBConn()
 			So(err, ShouldNotBeNil)
@@ -236,7 +346,9 @@ func TestUnit_gormTxCli_Commit_P0(t *testing.T) {
 		}
 
 		Convey("Invoke error", func() {
-			setMockError(mockClient)
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(fmt.Errorf("fake error"))
 
 			err := gormTxClient.Commit()
 			So(err.Error(), ShouldEqual, "fake error")
@@ -267,7 +379,9 @@ func TestUnit_gormTxCli_Rollback_P0(t *testing.T) {
 		}
 
 		Convey("Invoke error", func() {
-			setMockError(mockClient)
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(fmt.Errorf("fake error"))
 
 			err := gormTxClient.Rollback()
 			So(err.Error(), ShouldEqual, "fake error")
@@ -293,7 +407,9 @@ func TestUnit_gormCli_Ping_P0(t *testing.T) {
 		gormClient.(*Client).Client = mockClient
 
 		Convey("Invoke error", func() {
-			setMockError(mockClient)
+			mockClient.EXPECT().
+				Invoke(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+				Return(fmt.Errorf("fake error"))
 
 			err := gormClient.Ping()
 			So(err, ShouldNotBeNil)
@@ -316,6 +432,17 @@ func TestUnit_gormCli_QueryRowContext_P0(t *testing.T) {
 		gormClient := NewConnPool(SQLName, client.WithTarget("dns://xxxx"))
 		Convey("Invoke error", func() {
 			err := gormClient.QueryRowContext(context.Background(), "id=?", "1").Scan()
+			So(err, ShouldNotBeNil)
+		})
+	})
+}
+
+func TestUnit_gormCli_QueryRow_P0(t *testing.T) {
+	// Invalid DSN address.
+	Convey("TestUnit_gormCli_QueryRow_P0", t, func() {
+		gormClient := NewConnPool(SQLName, client.WithTarget("dns://xxxx"))
+		Convey("Invoke error", func() {
+			err := gormClient.QueryRow("id=?", "1").Scan()
 			So(err, ShouldNotBeNil)
 		})
 	})
@@ -496,5 +623,12 @@ func TestUnit_handleReqArgs(t *testing.T) {
 		}
 		err = handleReqArgs(req2)
 		So(err, ShouldNotBeNil)
+		var t3 *testValuer
+		req3 := &Request{
+			Op:   OpExecContext,
+			Args: []interface{}{3, "test3", t3},
+		}
+		err = handleReqArgs(req3)
+		So(err, ShouldBeNil)
 	})
 }
